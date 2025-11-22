@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Ruijie Fan ( 范睿捷 )"
+title: "About me"
 author_profile: true
 redirect_from: 
   - /about/
