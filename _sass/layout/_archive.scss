@@ -66,6 +66,37 @@
   }
 }
 
+.excerpt-wrapper {
+  position: relative;
+}
+
+.excerpt-collapsible {
+  margin-top: 0;
+  font-size: $type-size-6;
+  max-height: 3.6em;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+
+  &.expanded {
+    max-height: none;
+  }
+}
+
+.excerpt-toggle-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: $type-size-7;
+  padding: 0.2em 0;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+}
+
 .archive__item-teaser {
   border-radius: $border-radius;
   overflow: hidden;

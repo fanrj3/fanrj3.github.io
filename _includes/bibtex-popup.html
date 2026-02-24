@@ -1,0 +1,40 @@
+{% comment %}
+  BibTeX collapsible popup component.
+  Usage: {% include bibtex-popup.html bibtex_content=post.bibtex bibtex_id=post.slug %}
+{% endcomment %}
+
+<div class="bibtex-wrapper">
+  <button class="btn bibtex-toggle" onclick="toggleBibtex('{{ include.bibtex_id }}')">BibTeX</button>
+  <div id="bibtex-panel-{{ include.bibtex_id }}" class="bibtex-panel" style="display:none;">
+    <div class="bibtex-actions">
+      <button class="btn bibtex-action-btn" onclick="copyBibtex('{{ include.bibtex_id }}')" title="Copy to clipboard">Copy</button>
+      <button class="btn bibtex-action-btn" onclick="downloadBibtex('{{ include.bibtex_id }}')" title="Download .bib file">Download</button>
+    </div>
+    <pre class="bibtex-code"><code id="bibtex-content-{{ include.bibtex_id }}">{{ include.bibtex_content | strip }}</code></pre>
+  </div>
+</div>
+
+<script>
+function toggleBibtex(id) {
+  var panel = document.getElementById('bibtex-panel-' + id);
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+function copyBibtex(id) {
+  var text = document.getElementById('bibtex-content-' + id).textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    var btns = document.querySelectorAll('#bibtex-panel-' + id + ' .bibtex-action-btn');
+    var copyBtn = btns[0];
+    copyBtn.textContent = 'Copied!';
+    setTimeout(function() { copyBtn.textContent = 'Copy'; }, 2000);
+  });
+}
+function downloadBibtex(id) {
+  var text = document.getElementById('bibtex-content-' + id).textContent;
+  var blob = new Blob([text], { type: 'text/plain' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = id + '.bib';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
