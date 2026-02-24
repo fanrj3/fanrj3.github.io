@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "CV"
+title: "📄 CV"
 permalink: /cv/
 author_profile: true
 redirect_from:
@@ -9,17 +9,17 @@ redirect_from:
 
 {% include base_path %}
 
-Education
+🎓 Education
 ======
 * B.S. in Remote Sensing Science and Technology, Sun Yat-sen University, 2027 (expected)
 
-Work experience
+💼 Work Experience
 ======
 * Jan 2026 – Present: Quantitative Intern
   * RUBY ZHANG PTE. LTD.
   * Duties: Quantitative model training
 
-Publications
+📝 Publications
 ======
   <ul>{% for post in site.publications reversed %}
     {% include archive-single-cv.html %}

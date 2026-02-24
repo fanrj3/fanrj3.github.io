@@ -76,14 +76,30 @@
 }
 
 .excerpt-collapsible {
+  position: relative;
   margin-top: 0;
   font-size: $type-size-6;
   max-height: 3.6em;
   overflow: hidden;
   transition: max-height 0.3s ease;
 
+  &:not(.expanded)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.8em;
+    background: linear-gradient(transparent, var(--global-bg-color, #fff));
+    pointer-events: none;
+  }
+
   &.expanded {
     max-height: none;
+
+    &::after {
+      display: none;
+    }
   }
 
   p {
