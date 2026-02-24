@@ -2,10 +2,9 @@
   BibTeX collapsible popup component.
   Usage: {% include bibtex-popup.html bibtex_content=post.bibtex bibtex_id=post.slug %}
 {% endcomment %}
-
-<div class="bibtex-wrapper">
-  <button class="btn bibtex-toggle" onclick="toggleBibtex('{{ include.bibtex_id }}')">BibTeX</button>
-  <div id="bibtex-panel-{{ include.bibtex_id }}" class="bibtex-panel" style="display:none;">
+<span class="bibtex-inline-toggle"><a href="javascript:void(0)" class="bibtex-toggle-link" onclick="toggleBibtex('{{ include.bibtex_id }}')">BibTeX</a></span>
+<div id="bibtex-panel-{{ include.bibtex_id }}" class="bibtex-panel">
+  <div class="bibtex-panel-inner">
     <div class="bibtex-actions">
       <button class="btn bibtex-action-btn" onclick="copyBibtex('{{ include.bibtex_id }}')" title="Copy to clipboard">Copy</button>
       <button class="btn bibtex-action-btn" onclick="downloadBibtex('{{ include.bibtex_id }}')" title="Download .bib file">Download</button>
@@ -17,7 +16,13 @@
 <script>
 function toggleBibtex(id) {
   var panel = document.getElementById('bibtex-panel-' + id);
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  if (panel.classList.contains('open')) {
+    panel.style.maxHeight = '0';
+    panel.classList.remove('open');
+  } else {
+    panel.classList.add('open');
+    panel.style.maxHeight = panel.querySelector('.bibtex-panel-inner').scrollHeight + 'px';
+  }
 }
 function copyBibtex(id) {
   var text = document.getElementById('bibtex-content-' + id).textContent;

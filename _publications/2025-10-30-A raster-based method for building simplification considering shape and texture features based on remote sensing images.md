@@ -7,9 +7,22 @@ excerpt: 'Building simplification involves the process of reducing the complexit
 date: 2025-10-30
 venue: 'Geo-spatial Information Science'
 paperurl: 'https://www.tandfonline.com/doi/full/10.1080/10095020.2025.2573369'
-bibtexurl: 'https://fanrj3.github.io/files/raster_building_simplification.bib'
 header:
   teaser: raster_building_pipeline.png
+bibtex: |
+  @article{Fan30102025,
+    author = {Ruijie Fan and Yilang Shen},
+    title = {A raster-based method for building simplification considering shape and texture features based on remote sensing images},
+    journal = {Geo-spatial Information Science},
+    volume = {0},
+    number = {0},
+    pages = {1--21},
+    year = {2025},
+    publisher = {Taylor \& Francis},
+    doi = {10.1080/10095020.2025.2573369},
+    URL = {https://doi.org/10.1080/10095020.2025.2573369},
+    eprint = {https://doi.org/10.1080/10095020.2025.2573369}
+  }
 citation: 'Fan, R., & Shen, Y. (2025). A raster-based method for building simplification considering shape and texture features based on remote sensing images. Geo-Spatial Information Science, 1–21. https://doi.org/10.1080/10095020.2025.2573369'
 ---
 

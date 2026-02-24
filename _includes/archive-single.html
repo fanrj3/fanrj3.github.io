@@ -33,7 +33,7 @@
         <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
       {% endif %}
     </h2>
-    
+
     {% if post.read_time %}
       <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
     {% endif %}
@@ -48,29 +48,27 @@
 
     {% if post.excerpt %}
     <div class="excerpt-wrapper">
+      <p class="excerpt-label"><strong>Abstract:</strong></p>
       <div class="archive__item-excerpt excerpt-collapsible" itemprop="description" id="excerpt-{{ post.slug }}">
         {{ post.excerpt | markdownify }}
       </div>
       <button class="excerpt-toggle-btn" id="excerpt-btn-{{ post.slug }}" onclick="toggleExcerpt('{{ post.slug }}')" style="display:none;">Show more</button>
     </div>
     {% endif %}
-    
-    {% if post.citation %}
-      <p>Recommended citation: {{ post.citation }}</p>
-    {% endif %}
-    <p>
-    {% if post.paperurl %}
-      <a href="{{ post.paperurl }}">Download Paper</a>
-    {% endif %}
-    {% if post.slidesurl %}
-      {% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Download Slides</a>
-    {% endif %}
-    {% if post.bibtex %}
-      {% if post.paperurl or post.slidesurl %} | {% endif %}{% include bibtex-popup.html bibtex_content=post.bibtex bibtex_id=post.slug %}
-    {% elsif post.bibtexurl %}
-      {% if post.paperurl or post.slidesurl %} | {% endif %}<a href="{{ post.bibtexurl }}">Download Bibtex</a>
-    {% endif %}
-    </p>
+
+    <div class="pub-links">
+      {% if post.paperurl %}
+        <a href="{{ post.paperurl }}">Download Paper</a>
+      {% endif %}
+      {% if post.slidesurl %}
+        {% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Download Slides</a>
+      {% endif %}
+      {% if post.bibtex %}
+        {% if post.paperurl or post.slidesurl %} | {% endif %}{% include bibtex-popup.html bibtex_content=post.bibtex bibtex_id=post.slug %}
+      {% elsif post.bibtexurl %}
+        {% if post.paperurl or post.slidesurl %} | {% endif %}<a href="{{ post.bibtexurl }}">Download Bibtex</a>
+      {% endif %}
+    </div>
 
   </article>
 </div>

@@ -1,16 +1,24 @@
-.bibtex-wrapper {
-  display: inline;
+.bibtex-inline-toggle {
+  // stays inline with other links
 }
 
-.bibtex-toggle {
-  font-size: 0.85em;
-  padding: 0.25em 0.75em;
+.bibtex-toggle-link {
   cursor: pointer;
 }
 
 .bibtex-panel {
-  position: relative;
-  margin-top: 0.5em;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  border-radius: 4px;
+
+  &.open {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+}
+
+.bibtex-panel-inner {
   border: 1px solid #ddd;
   border-radius: 4px;
   background: #f8f9fa;
