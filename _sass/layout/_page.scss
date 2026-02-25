@@ -417,6 +417,10 @@
   .pub-meta {
     color: var(--global-text-color-light);
     font-size: 0.9em;
+
+    strong {
+      color: var(--global-text-color);
+    }
   }
 
   a {

@@ -131,6 +131,10 @@
   font-size: $type-size-6;
   color: var(--global-text-color-light);
   margin-top: 0.2em;
+
+  strong {
+    color: var(--global-text-color);
+  }
 }
 
 .venue-badge {
