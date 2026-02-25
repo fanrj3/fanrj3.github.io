@@ -24,7 +24,7 @@ bibtex: |
     URL = {https://doi.org/10.1080/10095020.2025.2573369},
     eprint = {https://doi.org/10.1080/10095020.2025.2573369}
   }
-citation: 'Fan, R., & Shen, Y. (2025). A raster-based method for building simplification considering shape and texture features based on remote sensing images. Geo-Spatial Information Science, 1–21. https://doi.org/10.1080/10095020.2025.2573369'
+citation: '<strong>Fan, R.</strong>, & Shen, Y. (2025). A raster-based method for building simplification considering shape and texture features based on remote sensing images. Geo-Spatial Information Science, 1–21. https://doi.org/10.1080/10095020.2025.2573369'
 ---
 
 ![Pipeline](/images/raster_building_pipeline.png)
