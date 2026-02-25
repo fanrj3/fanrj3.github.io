@@ -163,6 +163,10 @@
   display: flex;
   gap: 1.2em;
   align-items: flex-start;
+
+  .archive__item-title {
+    margin-top: 0;
+  }
 }
 
 .archive__item-teaser-side {
