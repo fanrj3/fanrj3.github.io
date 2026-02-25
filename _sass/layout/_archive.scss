@@ -158,6 +158,34 @@
   }
 }
 
+/* Side thumbnail layout for publications */
+.archive__item--with-teaser {
+  display: flex;
+  gap: 1.2em;
+  align-items: flex-start;
+}
+
+.archive__item-teaser-side {
+  flex: 0 0 180px;
+  border-radius: $border-radius;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    display: block;
+    border-radius: $border-radius;
+  }
+
+  @media (max-width: 600px) {
+    flex: 0 0 120px;
+  }
+}
+
+.archive__item-body {
+  flex: 1;
+  min-width: 0;
+}
+
 .archive__item:hover {
   .archive__item-teaser {
     box-shadow: 0 0 10px rgba(#000, 0.25);

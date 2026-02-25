@@ -13,63 +13,63 @@
 {% endif %}
 
 <div class="{{ include.type | default: 'list' }}__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+  <article class="archive__item {% if teaser %}archive__item--with-teaser{% endif %}" itemscope itemtype="http://schema.org/CreativeWork">
 
     {% if teaser %}
-      <div class="archive__item-teaser">
-        {% if teaser contains "://" %}<img src="{{ teaser }}" alt="">{% else %}<img src="{{ teaser | prepend: '/images/' | prepend: base_path }}" alt="">{% endif %}
-      </div>
+      <div class="archive__item-teaser-side">{% if teaser contains "://" %}<img src="{{ teaser }}" alt="">{% else %}<img src="{{ teaser | prepend: '/images/' | prepend: base_path }}" alt="">{% endif %}</div>
     {% endif %}
 
-    <h2 class="archive__item-title" itemprop="headline">
-      {% if post.collection == 'publications' and post.venue %}
-        {% if post.pubstatus == 'Accepted to' %}
-          <span class="venue-badge venue-badge--accepted">{{ post.venue }}</span>
-        {% else %}
-          <span class="venue-badge">{{ post.venue }}</span>
+    <div class="archive__item-body">
+      <h2 class="archive__item-title" itemprop="headline">
+        {% if post.collection == 'publications' and post.venue %}
+          {% if post.pubstatus == 'Accepted to' %}
+            <span class="venue-badge venue-badge--accepted">{{ post.venueshort | default: post.venue }}</span>
+          {% else %}
+            <span class="venue-badge">{{ post.venueshort | default: post.venue }}</span>
+          {% endif %}
         {% endif %}
-      {% endif %}
-      {% if post.link %}
-        <a href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
-      {% else %}
-        <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
-      {% endif %}
-    </h2>
+        {% if post.link %}
+          <a href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+        {% else %}
+          <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+        {% endif %}
+      </h2>
 
-    {% if post.read_time %}
-      <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
-    {% endif %}
-
-    {% if post.collection == 'teaching' %}
-      <p>{{ post.type }}, <i>{{ post.venue }}</i>, {{ post.date | default: "1900-01-01" | date: "%Y" }}</p>
-    {% elsif post.collection == 'publications' %}
-      <p class="pub-authors">{{ post.citation }}</p>
-    {% elsif post.date %}
-      <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].date_label | default: "Published:" }}</strong> <time datetime="{{ post.date | default: '1900-01-01' | date_to_xmlschema }}">{{ post.date | default: "1900-01-01" | date: "%B %d, %Y" }}</time></p>
-    {% endif %}
-
-    {% if post.excerpt and post.collection == 'publications' %}
-    <div class="excerpt-wrapper">
-      <p class="excerpt-label"><strong>Abstract:</strong></p>
-      <div class="archive__item-excerpt excerpt-collapsible" itemprop="description" id="excerpt-{{ post.slug }}">{{ post.excerpt | markdownify }}</div>
-      <button class="excerpt-toggle-btn" id="excerpt-btn-{{ post.slug }}" onclick="toggleExcerpt('{{ post.slug }}')" style="display:none;">Show more</button>
-    </div>
-    {% elsif post.excerpt %}
-      <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify }}</p>
-    {% endif %}
-
-    <div class="pub-links">
-      {% if post.paperurl %}
-        <a href="{{ post.paperurl }}">Download Paper</a>
+      {% if post.read_time %}
+        <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
       {% endif %}
-      {% if post.slidesurl %}
-        {% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Download Slides</a>
+
+      {% if post.collection == 'teaching' %}
+        <p>{{ post.type }}, <i>{{ post.venue }}</i>, {{ post.date | default: "1900-01-01" | date: "%Y" }}</p>
+      {% elsif post.collection == 'publications' %}
+        <p class="pub-authors">{{ post.citation }}</p>
+      {% elsif post.date %}
+        <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].date_label | default: "Published:" }}</strong> <time datetime="{{ post.date | default: '1900-01-01' | date_to_xmlschema }}">{{ post.date | default: "1900-01-01" | date: "%B %d, %Y" }}</time></p>
       {% endif %}
-      {% if post.bibtex %}
-        {% if post.paperurl or post.slidesurl %} | {% endif %}{% include bibtex-popup.html bibtex_content=post.bibtex bibtex_id=post.slug %}
-      {% elsif post.bibtexurl %}
-        {% if post.paperurl or post.slidesurl %} | {% endif %}<a href="{{ post.bibtexurl }}">Download Bibtex</a>
+
+      {% if post.excerpt and post.collection == 'publications' %}
+      <div class="excerpt-wrapper">
+        <p class="excerpt-label"><strong>Abstract:</strong></p>
+        <div class="archive__item-excerpt excerpt-collapsible" itemprop="description" id="excerpt-{{ post.slug }}">{{ post.excerpt | markdownify }}</div>
+        <button class="excerpt-toggle-btn" id="excerpt-btn-{{ post.slug }}" onclick="toggleExcerpt('{{ post.slug }}')" style="display:none;">Show more</button>
+      </div>
+      {% elsif post.excerpt %}
+        <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify }}</p>
       {% endif %}
+
+      <div class="pub-links">
+        {% if post.paperurl %}
+          <a href="{{ post.paperurl }}">Download Paper</a>
+        {% endif %}
+        {% if post.slidesurl %}
+          {% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Download Slides</a>
+        {% endif %}
+        {% if post.bibtex %}
+          {% if post.paperurl or post.slidesurl %} | {% endif %}{% include bibtex-popup.html bibtex_content=post.bibtex bibtex_id=post.slug %}
+        {% elsif post.bibtexurl %}
+          {% if post.paperurl or post.slidesurl %} | {% endif %}<a href="{{ post.bibtexurl }}">Download Bibtex</a>
+        {% endif %}
+      </div>
     </div>
 
   </article>

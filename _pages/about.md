@@ -28,6 +28,7 @@ Hello! I am an undergraduate student at the School of Geospatial Engineering and
 <ul class="pub-list-home">
 {% for post in site.publications reversed %}
   <li>
+    {% if post.pubstatus == 'Accepted to' %}<span class="venue-badge venue-badge--accepted">{{ post.venueshort | default: post.venue }}</span>{% else %}<span class="venue-badge">{{ post.venueshort | default: post.venue }}</span>{% endif %}
     <strong>{{ post.title }}</strong><br/>
     <span class="pub-meta">{{ post.citation }}</span><br/>
     {% if post.paperurl %}[<a href="{{ post.paperurl }}">Paper</a>]{% endif %}
