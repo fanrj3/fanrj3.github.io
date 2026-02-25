@@ -39,6 +39,13 @@ Hello! I am an undergraduate student at the School of Geospatial Engineering and
 
 <p>See all publications on the <a href="/publications/">Publications page</a>.</p>
 
+## 🏅 Honors and Awards
+
+- 2024-2025, National Scholarship, *Ministry of Education, P.R. China*
+- 2023-2024, National Scholarship, *Ministry of Education, P.R. China*
+- 2023-2025, First-Class Outstanding Student Scholarship, *Sun Yat-sen University*
+- 2024, Provincial First Prize, National Undergraduate Mathematical Modeling Contest, *Guangdong*
+
 ## 📫 Contact
 
 - **Email:** [fanrj3@mail2.sysu.edu.cn](mailto:fanrj3@mail2.sysu.edu.cn)
