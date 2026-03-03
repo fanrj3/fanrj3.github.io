@@ -15,6 +15,9 @@ redirect_from:
 
 💼 Work Experience
 ======
+* Mar 2026 – Present: Research Assistant
+  * Tsinghua Shenzhen International Graduate School, Tsinghua University
+  * Advised by [Weijia Li](https://liweijia.github.io/)
 * Jan 2026 – Present: Quantitative Intern
   * RUBY ZHANG PTE. LTD.
   * Duties: Quantitative model training
