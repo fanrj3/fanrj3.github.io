@@ -17,10 +17,6 @@ Hello! I am an undergraduate student at the School of Geospatial Engineering and
 - Spatial Intelligence
 - Remote Sensing and AI
 
-## 🎓 Education
-
-- **B.S. in Remote Sensing Science and Technology**, Sun Yat-sen University (expected 2027)
-
 ## 📝 Selected Publications
 
 {% include base_path %}
@@ -38,6 +34,17 @@ Hello! I am an undergraduate student at the School of Geospatial Engineering and
 </ul>
 
 <p>See all publications on the <a href="/publications/">Publications page</a>.</p>
+
+## 💼 Work Experience
+
+- **Research Assistant**, Tsinghua Shenzhen International Graduate School, Tsinghua University (Mar 2026 – Present)
+  - Advised by [Weijia Li](https://liweijia.github.io/)
+- **Quantitative Intern**, RUBY ZHANG PTE. LTD. (Jan 2026 – Present)
+  - Quantitative model training
+
+## 🎓 Education
+
+- **B.S. in Remote Sensing Science and Technology**, Sun Yat-sen University (expected 2027)
 
 ## 🏅 Honors and Awards
 
