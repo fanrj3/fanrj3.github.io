@@ -1,0 +1,27 @@
+type = "card"
+title = "Awards"
+description = "Honors and awards I have received."
+
+[[items]]
+title = "National Scholarship"
+subtitle = "Ministry of Education, P.R. China"
+date = "2025"
+content = "Awarded to top-performing undergraduate students nationwide for academic excellence."
+
+[[items]]
+title = "National Scholarship"
+subtitle = "Ministry of Education, P.R. China"
+date = "2024"
+content = "Awarded for outstanding academic performance and research potential."
+
+[[items]]
+title = "First-Class Outstanding Student Scholarship"
+subtitle = "Sun Yat-sen University"
+date = "2024"
+content = "Recognizing academic excellence and contributions to the university community."
+
+[[items]]
+title = "Provincial First Prize, CUMCM"
+subtitle = "China Society for Industrial and Applied Mathematics (CSIAM)"
+date = "2024"
+content = "National College Students Mathematical Contest in Modeling — Provincial First Prize."

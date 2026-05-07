@@ -1,0 +1,16 @@
+type = "card"
+title = "Projects"
+description = "Personal projects and experiments."
+
+[[items]]
+title = "ETO Droplet: Three-Body Problem Droplet Simulator"
+subtitle = "3D Interactive Simulator"
+date = "2025"
+content = """A 3D interactive simulator based on WebGL technology that recreates the iconic "Droplet" weapon from Liu Cixin's *The Three-Body Problem*. Players control an advanced alien probe tasked with destroying human spacecraft fleets.
+
+**Features:** High-speed physics simulation, volumetric particle explosion effects, intelligent AI fleet mechanics, cinematic camera system, immersive audio system, multiple input support (keyboard, mouse, game controller), cross-platform (web + desktop).
+
+**Tech Stack:** Three.js (r181), Vite 7.2, Electron 39.2
+
+[GitHub Repository](https://github.com/fanrj3/eto)"""
+tags = ["Three.js", "WebGL", "Game", "Interactive"]

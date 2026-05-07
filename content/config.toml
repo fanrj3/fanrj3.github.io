@@ -1,0 +1,61 @@
+[site]
+title = "Ruijie Fan"
+description = "Undergraduate student at Sun Yat-sen University, researching generative AI, spatial intelligence, and remote sensing."
+favicon = "/favicon.svg"
+last_updated = "May 2026"
+
+[author]
+name = "Ruijie Fan"
+title = "Undergraduate Student"
+institution = "Sun Yat-sen University"
+avatar = "/profile.png"
+
+[social]
+email = "fanrj3@mail2.sysu.edu.cn"
+location = "Zhuhai, Guangdong, China"
+google_scholar = "https://scholar.google.com/citations?user=K89GsdEAAAAJ"
+orcid = "https://orcid.org/0009-0007-9855-6101"
+github = "https://github.com/fanrj3"
+
+[features]
+enable_likes = true
+enable_one_page_mode = false
+
+[i18n]
+enabled = false
+locales = ["en"]
+default_locale = "en"
+mode = "fixed"
+fixed_locale = "en"
+persist = false
+switcher = false
+
+[[navigation]]
+title = "About"
+type = "page"
+target = "about"
+href = "/"
+
+[[navigation]]
+title = "Publications"
+type = "page"
+target = "publications"
+href = "/publications"
+
+[[navigation]]
+title = "Projects"
+type = "page"
+target = "projects"
+href = "/projects"
+
+[[navigation]]
+title = "Awards"
+type = "page"
+target = "awards"
+href = "/awards"
+
+[[navigation]]
+title = "CV"
+type = "page"
+target = "cv"
+href = "/cv"
