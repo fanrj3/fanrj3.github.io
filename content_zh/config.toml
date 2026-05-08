@@ -1,8 +1,9 @@
 [site]
-title = "范瑞杰"
+title = "范睿捷"
 description = "中山大学本科生，研究方向为生成式AI、空间智能与遥感。"
 
 [author]
+name = "范睿捷"
 title = "本科生"
 institution = "中山大学"
 
