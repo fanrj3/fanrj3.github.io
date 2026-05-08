@@ -315,9 +315,9 @@ export default function Profile({ author, social, features, researchInterests }:
             <div className="flex flex-col items-center mb-6">
                 <iframe
                     title="Visitors Globe"
-                    srcDoc={`<!doctype html><html><head><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;}</style></head><body><script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"><\/script></body></html>`}
+                    srcDoc={`<!doctype html><html><head><base href="https://clustrmaps.com/"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;}</style></head><body><script type="text/javascript" id="clstr_globe" src="https://clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"><\/script></body></html>`}
                     className="w-[260px] h-[260px] border-0"
-                    sandbox="allow-scripts allow-same-origin"
+                    sandbox="allow-scripts"
                 />
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{messages.profile.visitorMap}</p>
             </div>
