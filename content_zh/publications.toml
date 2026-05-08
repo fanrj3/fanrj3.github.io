@@ -1,0 +1,4 @@
+type = "publication"
+title = "论文"
+description = "我发表的研究工作。"
+source = "publications.bib"

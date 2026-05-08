@@ -1,0 +1,37 @@
+[site]
+title = "范瑞杰"
+description = "中山大学本科生，研究方向为生成式AI、空间智能与遥感。"
+
+[author]
+title = "本科生"
+institution = "中山大学"
+
+[[navigation]]
+title = "关于"
+type = "page"
+target = "about"
+href = "/"
+
+[[navigation]]
+title = "论文"
+type = "page"
+target = "publications"
+href = "/publications"
+
+[[navigation]]
+title = "项目"
+type = "page"
+target = "projects"
+href = "/projects"
+
+[[navigation]]
+title = "获奖"
+type = "page"
+target = "awards"
+href = "/awards"
+
+[[navigation]]
+title = "简历"
+type = "page"
+target = "cv"
+href = "/cv"

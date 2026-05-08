@@ -22,13 +22,17 @@ enable_likes = true
 enable_one_page_mode = false
 
 [i18n]
-enabled = false
-locales = ["en"]
+enabled = true
+locales = ["zh", "en"]
 default_locale = "en"
-mode = "fixed"
+mode = "auto"
 fixed_locale = "en"
-persist = false
-switcher = false
+persist = true
+switcher = true
+
+[i18n.labels]
+zh = "中文"
+en = "English"
 
 [[navigation]]
 title = "About"

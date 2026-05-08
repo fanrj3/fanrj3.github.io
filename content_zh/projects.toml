@@ -1,0 +1,16 @@
+type = "card"
+title = "项目"
+description = "个人项目与实验。"
+
+[[items]]
+title = "ETO 水滴：三体问题水滴模拟器"
+subtitle = "3D 交互式模拟器"
+date = "2025"
+content = """一个基于 WebGL 技术的 3D 交互式模拟器，再现了刘慈欣《三体》中标志性的"水滴"武器。玩家操控先进的外星探测器，执行摧毁人类宇宙飞船舰队的任务。
+
+**特性：** 高速物理模拟、体积粒子爆炸效果、智能 AI 舰队机制、电影级相机系统、沉浸式音频系统、多种输入支持（键盘、鼠标、手柄）、跨平台（Web + 桌面）。
+
+**技术栈：** Three.js (r181)、Vite 7.2、Electron 39.2
+
+[GitHub 仓库](https://github.com/fanrj3/eto)"""
+tags = ["Three.js", "WebGL", "游戏", "交互"]
