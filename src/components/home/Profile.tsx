@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     EnvelopeIcon,
@@ -43,7 +43,6 @@ export default function Profile({ author, social, features, researchInterests }:
     const [showEmail, setShowEmail] = useState(false);
     const [isEmailPinned, setIsEmailPinned] = useState(false);
     const [lastClickedTooltip, setLastClickedTooltip] = useState<'email' | 'address' | null>(null);
-    const globeContainerRef = useRef<HTMLDivElement>(null);
 
     // Check local storage for user's like status
     useEffect(() => {
@@ -54,17 +53,6 @@ export default function Profile({ author, social, features, researchInterests }:
             setHasLiked(true);
         }
     }, [features.enable_likes]);
-
-    // Load ClustrMaps globe widget
-    useEffect(() => {
-        const container = globeContainerRef.current;
-        if (!container || container.querySelector('#clstr_globe')) return;
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.id = 'clstr_globe';
-        script.src = '//clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo';
-        container.appendChild(script);
-    }, []);
 
     const handleLike = () => {
         const newLikedState = !hasLiked;
@@ -324,8 +312,13 @@ export default function Profile({ author, social, features, researchInterests }:
             )}
 
             {/* ClustrMaps Globe Widget */}
-            <div className="flex justify-center items-center mb-6 min-h-[160px]">
-                <div ref={globeContainerRef} id="clustrmaps-globe-container" />
+            <div className="flex justify-center mb-6">
+                <iframe
+                    title="Visitors Globe"
+                    srcDoc={`<!doctype html><html><head><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden;}</style></head><body><script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"><\/script></body></html>`}
+                    className="w-[200px] h-[200px] border-0"
+                    sandbox="allow-scripts allow-same-origin"
+                />
             </div>
 
             {/* Like Button */}
