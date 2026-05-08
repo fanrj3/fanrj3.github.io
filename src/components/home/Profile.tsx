@@ -315,7 +315,7 @@ export default function Profile({ author, social, features, researchInterests }:
             <div className="flex flex-col items-center mb-6">
                 <iframe
                     title="Visitors Globe"
-                    srcDoc={`<!doctype html><html><head><base href="https://clustrmaps.com/"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;}</style></head><body><script type="text/javascript" id="clstr_globe" src="https://clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"><\/script></body></html>`}
+                    srcDoc={`<!doctype html><html><head><base href="https://clustrmaps.com/"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden;width:260px;height:260px;}#clstr_wrap{width:260px;}</style></head><body><div id="clstr_wrap"><script type="text/javascript" id="clstr_globe" src="https://clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"><\/script></div></body></html>`}
                     className="w-[260px] h-[260px] border-0"
                     sandbox="allow-scripts"
                 />
