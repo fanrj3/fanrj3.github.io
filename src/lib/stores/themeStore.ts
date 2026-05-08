@@ -6,13 +6,23 @@ export type Theme = 'light' | 'dark' | 'system';
 interface ThemeStore {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  toggleTheme: () => void; // toggles between light/dark (explicit override)
+  toggleTheme: () => void;
 }
+
+const storage = createJSONStorage(() => {
+  if (typeof window === 'undefined') {
+    return {
+      getItem: () => null,
+      setItem: () => { },
+      removeItem: () => { },
+    };
+  }
+  return localStorage;
+});
 
 export const useThemeStore = create<ThemeStore>()(
   persist(
     (set, get) => ({
-      // Default to system preference
       theme: 'system',
       setTheme: (theme: Theme) => {
         set({ theme });
@@ -20,7 +30,6 @@ export const useThemeStore = create<ThemeStore>()(
       },
       toggleTheme: () => {
         const current = get().theme;
-        // When in system mode, first toggle explicitly to light
         const newTheme = current === 'dark' ? 'light' : 'dark';
         set({ theme: newTheme });
         updateTheme(newTheme);
@@ -28,16 +37,8 @@ export const useThemeStore = create<ThemeStore>()(
     }),
     {
       name: 'theme-storage',
-      storage: createJSONStorage(() => {
-        if (typeof window !== 'undefined') {
-          return localStorage;
-        }
-        return {
-          getItem: () => null,
-          setItem: () => { },
-          removeItem: () => { },
-        };
-      }),
+      storage,
+      skipHydration: true,
     }
   )
 );
@@ -55,8 +56,8 @@ export function resolveTheme(theme: Theme): 'light' | 'dark' {
 }
 
 function updateTheme(theme: Theme) {
+  if (typeof document === 'undefined') return;
   const effective = resolveTheme(theme);
-  // Update DOM
   const root = document.documentElement;
   root.classList.remove('light', 'dark');
   root.classList.add(effective);

@@ -13,6 +13,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    useThemeStore.persist.rehydrate();
     setMounted(true);
   }, []);
 

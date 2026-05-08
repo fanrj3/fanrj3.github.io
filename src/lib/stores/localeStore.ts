@@ -16,13 +16,19 @@ interface LocaleStore {
   setLocale: (locale: string) => void;
 }
 
+function isBrowser() {
+  return typeof window !== 'undefined';
+}
+
 function updateDocumentLocale(locale: string) {
+  if (!isBrowser()) return;
   const root = document.documentElement;
   root.lang = locale;
   root.setAttribute('data-locale', locale);
 }
 
 function readPersistedLocale(locales: string[]): string | null {
+  if (!isBrowser()) return null;
   try {
     const raw = localStorage.getItem(LOCALE_STORAGE_KEY);
     return matchLocale(raw, locales);
@@ -32,6 +38,7 @@ function readPersistedLocale(locales: string[]): string | null {
 }
 
 function writePersistedLocale(locale: string) {
+  if (!isBrowser()) return;
   try {
     localStorage.setItem(LOCALE_STORAGE_KEY, locale);
   } catch {
@@ -40,6 +47,7 @@ function writePersistedLocale(locale: string) {
 }
 
 function clearPersistedLocale() {
+  if (!isBrowser()) return;
   try {
     localStorage.removeItem(LOCALE_STORAGE_KEY);
   } catch {
@@ -48,6 +56,8 @@ function clearPersistedLocale() {
 }
 
 function resolveInitialLocale(config: I18nRuntimeConfig): string {
+  if (!isBrowser()) return config.defaultLocale;
+
   const bootLocale = matchLocale(document.documentElement.getAttribute('data-locale'), config.locales);
   if (bootLocale) {
     return bootLocale;
@@ -86,13 +96,14 @@ export const useLocaleStore = create<LocaleStore>()((set, get) => ({
       persistSelection: config.persist,
     });
 
-    if (config.persist) {
-      writePersistedLocale(initialLocale);
-    } else {
-      clearPersistedLocale();
+    if (isBrowser()) {
+      if (config.persist) {
+        writePersistedLocale(initialLocale);
+      } else {
+        clearPersistedLocale();
+      }
+      updateDocumentLocale(initialLocale);
     }
-
-    updateDocumentLocale(initialLocale);
   },
 
   setLocale: (locale: string) => {
@@ -101,12 +112,13 @@ export const useLocaleStore = create<LocaleStore>()((set, get) => ({
 
     set({ locale: nextLocale });
 
-    if (persistSelection) {
-      writePersistedLocale(nextLocale);
-    } else {
-      clearPersistedLocale();
+    if (isBrowser()) {
+      if (persistSelection) {
+        writePersistedLocale(nextLocale);
+      } else {
+        clearPersistedLocale();
+      }
+      updateDocumentLocale(nextLocale);
     }
-
-    updateDocumentLocale(nextLocale);
   },
 }));
