@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     EnvelopeIcon,
@@ -43,7 +43,7 @@ export default function Profile({ author, social, features, researchInterests }:
     const [showEmail, setShowEmail] = useState(false);
     const [isEmailPinned, setIsEmailPinned] = useState(false);
     const [lastClickedTooltip, setLastClickedTooltip] = useState<'email' | 'address' | null>(null);
-    const [globeLoaded, setGlobeLoaded] = useState(false);
+    const globeContainerRef = useRef<HTMLDivElement>(null);
 
     // Check local storage for user's like status
     useEffect(() => {
@@ -57,16 +57,14 @@ export default function Profile({ author, social, features, researchInterests }:
 
     // Load ClustrMaps globe widget
     useEffect(() => {
-        if (globeLoaded) return;
-        const container = document.getElementById('clustrmaps-globe-container');
-        if (!container) return;
+        const container = globeContainerRef.current;
+        if (!container || container.querySelector('#clstr_globe')) return;
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.id = 'clstr_globe';
         script.src = '//clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo';
         container.appendChild(script);
-        setGlobeLoaded(true);
-    }, [globeLoaded]);
+    }, []);
 
     const handleLike = () => {
         const newLikedState = !hasLiked;
@@ -326,8 +324,8 @@ export default function Profile({ author, social, features, researchInterests }:
             )}
 
             {/* ClustrMaps Globe Widget */}
-            <div className="flex justify-center mb-6">
-                <div id="clustrmaps-globe-container" className="flex items-center justify-center" />
+            <div className="flex justify-center items-center mb-6 min-h-[160px]">
+                <div ref={globeContainerRef} id="clustrmaps-globe-container" />
             </div>
 
             {/* Like Button */}
