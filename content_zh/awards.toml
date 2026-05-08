@@ -17,6 +17,12 @@ content = "表彰出色的学术表现和研究潜力。"
 [[items]]
 title = "一等奖优秀学生奖学金"
 subtitle = "中山大学"
+date = "2025"
+content = "表彰持续的学术卓越表现与领导力。"
+
+[[items]]
+title = "一等奖优秀学生奖学金"
+subtitle = "中山大学"
 date = "2024"
 content = "表彰学术卓越及对大学社区的贡献。"
 

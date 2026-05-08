@@ -43,6 +43,7 @@ export default function Profile({ author, social, features, researchInterests }:
     const [showEmail, setShowEmail] = useState(false);
     const [isEmailPinned, setIsEmailPinned] = useState(false);
     const [lastClickedTooltip, setLastClickedTooltip] = useState<'email' | 'address' | null>(null);
+    const [globeLoaded, setGlobeLoaded] = useState(false);
 
     // Check local storage for user's like status
     useEffect(() => {
@@ -53,6 +54,19 @@ export default function Profile({ author, social, features, researchInterests }:
             setHasLiked(true);
         }
     }, [features.enable_likes]);
+
+    // Load ClustrMaps globe widget
+    useEffect(() => {
+        if (globeLoaded) return;
+        const container = document.getElementById('clustrmaps-globe-container');
+        if (!container) return;
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.id = 'clstr_globe';
+        script.src = '//clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo';
+        container.appendChild(script);
+        setGlobeLoaded(true);
+    }, [globeLoaded]);
 
     const handleLike = () => {
         const newLikedState = !hasLiked;
@@ -310,6 +324,11 @@ export default function Profile({ author, social, features, researchInterests }:
                     </div>
                 </div>
             )}
+
+            {/* ClustrMaps Globe Widget */}
+            <div className="flex justify-center mb-6">
+                <div id="clustrmaps-globe-container" className="flex items-center justify-center" />
+            </div>
 
             {/* Like Button */}
             {features.enable_likes && (
