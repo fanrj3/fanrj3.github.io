@@ -9,7 +9,7 @@
 - Advised by [Weijia Li](https://liweijia.github.io/)
 - Research on satellite video object tracking and foundation models for remote sensing
 
-**Quantitative Intern**, RUBY ZHANG PTE. LTD., *Jan 2026 – Present*
+**Quantitative Intern**, RUBY ZHANG PTE. LTD., *Jan 2026 – May 2026*
 - Quantitative model training
 
 ## Skills
