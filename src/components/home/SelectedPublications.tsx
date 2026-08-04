@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Publication } from '@/types/publication';
 import { useMessages } from '@/lib/i18n/useMessages';
+import { useLocaleStore } from '@/lib/stores/localeStore';
+import { formatPublicationDate } from '@/lib/utils';
 
 interface SelectedPublicationsProps {
     publications: Publication[];
@@ -13,6 +15,7 @@ interface SelectedPublicationsProps {
 
 export default function SelectedPublications({ publications, title, enableOnePageMode = false }: SelectedPublicationsProps) {
     const messages = useMessages();
+    const locale = useLocaleStore((state) => state.locale);
     const resolvedTitle = title || messages.home.selectedPublications;
 
     return (
@@ -56,12 +59,16 @@ export default function SelectedPublications({ publications, title, enableOnePag
                                 </span>
                             ))}
                         </p>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-500 mb-2">
-                            {pub.journal || pub.conference}
-                        </p>
-                        {pub.description && (
+                        {(pub.journal || pub.conference || pub.status === 'under-review') && (
+                            <p className="text-sm text-neutral-600 dark:text-neutral-500 mb-2">
+                                {pub.status === 'under-review'
+                                    ? formatPublicationDate(pub.year, pub.month, locale)
+                                    : pub.journal || pub.conference}
+                            </p>
+                        )}
+                        {(pub.description || (pub.status === 'under-review' && pub.abstract)) && (
                             <p className="text-sm text-neutral-500 dark:text-neutral-500 line-clamp-2">
-                                {pub.description}
+                                {pub.description || pub.abstract}
                             </p>
                         )}
                         {(pub.url || pub.projectUrl || pub.code || pub.datasetUrl) && (

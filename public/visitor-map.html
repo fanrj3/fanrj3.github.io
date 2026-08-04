@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base target="_blank">
+  <style>
+    html,
+    body {
+      width: 260px;
+      height: 180px;
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #fallback,
+    #live-map {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #fallback {
+      z-index: 1;
+    }
+
+    #fallback img {
+      display: block;
+      width: 260px;
+      max-height: 180px;
+      object-fit: contain;
+    }
+
+    #live-map {
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <a id="fallback" href="https://clustrmaps.com/" aria-label="Open visitor map">
+    <img
+      src="https://clustrmaps.com/map_v2.png?cl=ffffff&d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"
+      alt="Visitor locations"
+    >
+  </a>
+  <div id="live-map">
+    <script
+      id="clustrmaps"
+      src="https://cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=a&t=n&d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"
+    ></script>
+  </div>
+  <script>
+    const fallback = document.getElementById('fallback');
+    const liveMap = document.getElementById('live-map');
+    const showLiveMap = () => {
+      if (liveMap.querySelector('a, canvas, iframe, img, svg')) {
+        fallback.hidden = true;
+      }
+    };
+
+    new MutationObserver(showLiveMap).observe(liveMap, { childList: true, subtree: true });
+    showLiveMap();
+  </script>
+</body>
+</html>

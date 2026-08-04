@@ -311,13 +311,13 @@ export default function Profile({ author, social, features, researchInterests }:
                 </div>
             )}
 
-            {/* ClustrMaps Globe Widget */}
+            {/* ClustrMaps visitor map */}
             <div className="flex flex-col items-center mb-6">
                 <iframe
-                    title="Visitors Globe"
-                    srcDoc={`<!doctype html><html><head><base href="https://clustrmaps.com/"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden;width:260px;height:260px;}#clstr_wrap{width:260px;}</style></head><body><div id="clstr_wrap"><script type="text/javascript" id="clstr_globe" src="https://clustrmaps.com/globe.js?d=tWkvsz5EefX-z_AQzbFLBpDF17623esBB2oRiXWogvo"><\/script></div></body></html>`}
-                    className="w-[260px] h-[260px] border-0"
-                    sandbox="allow-scripts"
+                    title="Visitor Map"
+                    src="/visitor-map.html"
+                    className="w-[260px] h-[180px] border-0"
+                    sandbox="allow-scripts allow-popups"
                 />
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{messages.profile.visitorMap}</p>
             </div>

@@ -13,8 +13,9 @@ import {
 } from '@heroicons/react/24/outline';
 import { Publication } from '@/types/publication';
 import { PublicationPageConfig } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn, formatPublicationDate } from '@/lib/utils';
 import { useMessages } from '@/lib/i18n/useMessages';
+import { useLocaleStore } from '@/lib/stores/localeStore';
 
 interface PublicationsListProps {
     config: PublicationPageConfig;
@@ -24,6 +25,7 @@ interface PublicationsListProps {
 
 export default function PublicationsList({ config, publications, embedded = false }: PublicationsListProps) {
     const messages = useMessages();
+    const locale = useLocaleStore((state) => state.locale);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
     const [selectedType, setSelectedType] = useState<string | 'all'>('all');
@@ -230,10 +232,18 @@ export default function PublicationsList({ config, publications, embedded = fals
                                         ))}
                                     </p>
                                     <p className="text-sm font-medium text-neutral-800 dark:text-neutral-600 mb-3">
-                                        {pub.journal || pub.conference} {pub.year}
+                                        {pub.status === 'under-review'
+                                            ? formatPublicationDate(pub.year, pub.month, locale)
+                                            : `${pub.journal || pub.conference} ${pub.year}`}
                                     </p>
 
-                                    {pub.description && (
+                                    {pub.status === 'under-review' && pub.abstract && (
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-500 mb-4 line-clamp-4">
+                                            {pub.abstract}
+                                        </p>
+                                    )}
+
+                                    {pub.status !== 'under-review' && pub.description && (
                                         <p className="text-sm text-neutral-600 dark:text-neutral-500 mb-4 line-clamp-3">
                                             {pub.description}
                                         </p>
@@ -290,7 +300,7 @@ export default function PublicationsList({ config, publications, embedded = fals
                                                 {messages.publications.dataset}
                                             </a>
                                         )}
-                                        {pub.abstract && (
+                                        {pub.abstract && pub.status !== 'under-review' && (
                                             <button
                                                 onClick={() => setExpandedAbstractId(expandedAbstractId === pub.id ? null : pub.id)}
                                                 className={cn(

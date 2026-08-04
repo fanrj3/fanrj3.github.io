@@ -1,4 +1,4 @@
-import { Publication, PublicationType, ResearchArea } from '@/types/publication';
+import { Publication, PublicationStatus, PublicationType, ResearchArea } from '@/types/publication';
 import { getConfig } from './config';
 import { getRuntimeI18nConfig } from './i18n/config';
 
@@ -35,6 +35,15 @@ const monthMapping: Record<string, number> = {
   dec: 12, december: 12,
 };
 
+const publicationStatuses: PublicationStatus[] = [
+  'published',
+  'accepted',
+  'under-review',
+  'submitted',
+  'in-preparation',
+  'draft',
+];
+
 export function parseBibTeX(bibtexContent: string, locale?: string): Publication[] {
   const highlightNames = getHighlightNames(locale);
   const entries = bibtexParse.toJSON(bibtexContent);
@@ -58,6 +67,9 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
 
     // Parse selected field (convert string to boolean)
     const selected = tags.selected === 'true' || tags.selected === 'yes';
+    const status = publicationStatuses.includes(tags.status as PublicationStatus)
+      ? tags.status as PublicationStatus
+      : 'published';
 
     // Parse preview field (remove braces if present)
     const preview = tags.preview?.replace(/[{}]/g, '');
@@ -70,7 +82,7 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
       year,
       month: monthMapping[tags.month?.toLowerCase()] ? String(month) : tags.month,
       type,
-      status: 'published',
+      status,
       tags: keywords,
       keywords,
       researchArea: detectResearchArea(tags.title, keywords),
@@ -92,7 +104,9 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
       preview,
 
       // Store original BibTeX (excluding custom fields)
-      bibtex: reconstructBibTeX(entry, ['selected', 'preview', 'description', 'keywords', 'code', 'project', 'dataset']),
+      bibtex: tags.showbibtex === 'false'
+        ? undefined
+        : reconstructBibTeX(entry, ['selected', 'preview', 'description', 'keywords', 'code', 'project', 'dataset', 'status', 'showbibtex']),
     };
 
     // Clean up undefined fields
