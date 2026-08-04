@@ -1,11 +1,13 @@
 @unpublished{ye2026epbevplus,
   selected = {true},
-  title = {EP-BEV+: A Robust Cross-View Geolocalization Network via Panoramic-Feature BEV Collaboration},
-  author = {Junyan Ye and Ruijie Fan and {et al.}},
+  title = {EP-BEV+: A Robust Cross-View Geolocalization Network via Panoramic–Feature BEV Collaboration},
+  author = {Ruijie Fan# and Leyan Ou# and Junyan Ye and Weijia Li*},
+  authoraffiliations = {1,2 | 2 | 2 | 1},
   year = {2026},
   month = apr,
   status = {under-review},
-  abstract = {Cross-view geo-localization (CVGL) remains highly challenging due to the substantial viewpoint and structural discrepancies between ground-level panoramas and aerial imagery. While recent Bird's-Eye-View (BEV) mapping methods help bridge this domain gap, they predominantly rely on a planar ground assumption, which inevitably introduces severe boundary distortions and suppresses critical vertical structures in dense urban environments. To overcome these limitations, we propose EP-BEV+, a robust CVGL framework that advances cross-view geometric modeling and multi-branch collaboration. EP-BEV++ introduces a curved-surface BEV projection that preserves facade-level geometric cues and alleviates peripheral stretching, while a Cross-Loss Contrastive Learning strategy uses layout-centric augmentations to enforce cross-view geometric consistency. We further introduce CVGlobal V2, an expanded benchmark spanning heterogeneous urban morphologies across 20 cities. Extensive experiments demonstrate state-of-the-art performance on standard datasets and superior transferability in challenging cross-city and cross-time scenarios.},
+  affiliations = {Tsinghua Shenzhen International Graduate School, Tsinghua University | School of Geospatial Engineering and Science, Sun Yat-sen University},
+  abstract = {Cross-view geo-localization (CVGL) remains highly challenging due to the substantial viewpoint and structural discrepancies between ground-level panoramas and aerial imagery. While recent Bird's-Eye-View (BEV) mapping methods help bridge this domain gap, they often rely on a planar ground assumption, which can introduce boundary distortions and reduce vertical-structure cues (e.g., building facades) in dense urban environments. To address these limitations, we propose EP-BEV+, a CVGL framework that improves cross-view geometric modeling and multi-branch collaboration. Specifically, we introduce EP-BEV++, a curved-surface BEV projection mechanism that better preserves facade-level geometric cues and alleviates peripheral stretching. To reduce overfitting to dataset-specific appearance statistics, we propose a Cross-Loss Contrastive Learning (CCL) strategy that uses reference-side stochastic augmentations to encourage satellite-view invariance and robust query-to-reference alignment. To evaluate global-scale robustness and cross-region generalization, we introduce CVGlobal V2, an expanded benchmark that adds 13 test cities and expands the overall benchmark to 20 cities with heterogeneous urban morphologies worldwide. Extensive experiments show that EP-BEV+ achieves competitive or state-of-the-art performance on standard datasets (CVUSA, CVACT, and VIGOR) and shows strong transferability in challenging cross-city and cross-time scenarios.},
   preview = {epbevplus_flag.png},
   showbibtex = {false}
 }

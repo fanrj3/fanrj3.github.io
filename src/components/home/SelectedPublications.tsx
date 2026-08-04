@@ -52,6 +52,9 @@ export default function SelectedPublications({ publications, title, enableOnePag
                                     <span className={`${author.isHighlighted ? 'font-semibold text-accent' : ''} ${author.isCoAuthor ? `underline underline-offset-4 ${author.isHighlighted ? 'decoration-accent' : 'decoration-neutral-400'}` : ''}`}>
                                         {author.name}
                                     </span>
+                                    {author.affiliation && (
+                                        <sup className="ml-0.5 text-neutral-500 dark:text-neutral-500">{author.affiliation}</sup>
+                                    )}
                                     {author.isCorresponding && (
                                         <sup className={`ml-0 ${author.isHighlighted ? 'text-accent' : 'text-neutral-600 dark:text-neutral-500'}`}>†</sup>
                                     )}
@@ -59,6 +62,16 @@ export default function SelectedPublications({ publications, title, enableOnePag
                                 </span>
                             ))}
                         </p>
+                        {pub.affiliations && pub.affiliations.length > 0 && (
+                            <div className="text-sm leading-5 text-neutral-500 dark:text-neutral-500 mb-2">
+                                {pub.affiliations.map((affiliation, affiliationIndex) => (
+                                    <p key={affiliation}>
+                                        <sup className="mr-1">{affiliationIndex + 1}</sup>
+                                        {affiliation}
+                                    </p>
+                                ))}
+                            </div>
+                        )}
                         {(pub.journal || pub.conference || pub.status === 'under-review') && (
                             <p className="text-sm text-neutral-600 dark:text-neutral-500 mb-2">
                                 {pub.status === 'under-review'
