@@ -203,12 +203,17 @@ export default function PublicationsList({ config, publications, embedded = fals
                             <div className="flex flex-col md:flex-row gap-6">
                                 {pub.preview && (
                                     <div className="w-full md:w-48 flex-shrink-0">
-                                        <div className="aspect-video md:aspect-[4/3] relative rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+                                        <div className={cn(
+                                            "aspect-video md:aspect-[4/3] relative rounded-lg overflow-hidden",
+                                            pub.preview === 'epbevplus_pipeline.png'
+                                                ? "bg-white"
+                                                : "bg-neutral-100 dark:bg-neutral-800"
+                                        )}>
                                             <Image
                                                 src={`/papers/${pub.preview}`}
                                                 alt={pub.title}
                                                 fill
-                                                className="object-cover"
+                                                className={pub.preview === 'epbevplus_pipeline.png' ? "object-contain p-1" : "object-cover"}
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                         </div>
@@ -224,9 +229,6 @@ export default function PublicationsList({ config, publications, embedded = fals
                                                 <span className={`${author.isHighlighted ? 'font-semibold text-accent' : ''} ${author.isCoAuthor ? `underline underline-offset-4 ${author.isHighlighted ? 'decoration-accent' : 'decoration-neutral-400'}` : ''}`}>
                                                     {author.name}
                                                 </span>
-                                                {author.affiliation && (
-                                                    <sup className="ml-0.5 text-neutral-500 dark:text-neutral-500">{author.affiliation}</sup>
-                                                )}
                                                 {author.isCorresponding && (
                                                     <sup className={`ml-0 ${author.isHighlighted ? 'text-accent' : 'text-neutral-600 dark:text-neutral-400'}`}>†</sup>
                                                 )}
@@ -234,16 +236,6 @@ export default function PublicationsList({ config, publications, embedded = fals
                                             </span>
                                         ))}
                                     </p>
-                                    {pub.affiliations && pub.affiliations.length > 0 && (
-                                        <div className="text-sm leading-5 text-neutral-500 dark:text-neutral-500 mb-2">
-                                            {pub.affiliations.map((affiliation, affiliationIndex) => (
-                                                <p key={affiliation}>
-                                                    <sup className="mr-1">{affiliationIndex + 1}</sup>
-                                                    {affiliation}
-                                                </p>
-                                            ))}
-                                        </div>
-                                    )}
                                     <p className="text-sm font-medium text-neutral-800 dark:text-neutral-600 mb-3">
                                         {pub.status === 'under-review'
                                             ? formatPublicationDate(pub.year, pub.month, locale)

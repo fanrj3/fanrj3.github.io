@@ -52,13 +52,7 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
     const tags = entry.entryTags;
 
     // Parse authors
-    const authorAffiliations = tags.authoraffiliations
-      ?.split('|')
-      .map((affiliation: string) => affiliation.trim());
-    const authors = parseAuthors(tags.author || '', highlightNames).map((author, authorIndex) => ({
-      ...author,
-      affiliation: authorAffiliations?.[authorIndex],
-    }));
+    const authors = parseAuthors(tags.author || '', highlightNames);
 
     // Parse year and month
     const year = parseInt(tags.year) || new Date().getFullYear();
@@ -106,17 +100,13 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
       datasetUrl: tags.dataset,
       abstract: cleanBibTeXString(tags.abstract),
       description: cleanBibTeXString(tags.description || tags.note),
-      affiliations: tags.affiliations
-        ?.split('|')
-        .map((affiliation: string) => cleanBibTeXString(affiliation).trim())
-        .filter(Boolean),
       selected,
       preview,
 
       // Store original BibTeX (excluding custom fields)
       bibtex: tags.showbibtex === 'false'
         ? undefined
-        : reconstructBibTeX(entry, ['selected', 'preview', 'description', 'keywords', 'code', 'project', 'dataset', 'status', 'showbibtex', 'affiliations', 'authoraffiliations']),
+        : reconstructBibTeX(entry, ['selected', 'preview', 'description', 'keywords', 'code', 'project', 'dataset', 'status', 'showbibtex']),
     };
 
     // Clean up undefined fields

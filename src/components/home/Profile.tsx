@@ -311,12 +311,12 @@ export default function Profile({ author, social, features, researchInterests }:
                 </div>
             )}
 
-            {/* ClustrMaps visitor map */}
+            {/* MapMyVisitors visitor map */}
             <div className="flex flex-col items-center mb-6">
                 <iframe
                     title="Visitor Map"
                     src="/visitor-map.html"
-                    className="w-[260px] h-[180px] border-0"
+                    className="w-[260px] h-[180px] border-0 bg-transparent"
                     sandbox="allow-scripts allow-popups"
                 />
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{messages.profile.visitorMap}</p>
