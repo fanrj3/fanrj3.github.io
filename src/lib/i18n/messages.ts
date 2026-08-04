@@ -41,7 +41,10 @@ export interface LocaleMessages {
     noResults: string;
     abstract: string;
     bibtex: string;
+    paper: string;
+    project: string;
     code: string;
+    dataset: string;
   };
   footer: {
     lastUpdated: string;
@@ -92,7 +95,10 @@ const en: LocaleMessages = {
     noResults: 'No publications found matching your criteria.',
     abstract: 'Abstract',
     bibtex: 'BibTeX',
+    paper: 'Paper',
+    project: 'Project',
     code: 'Code',
+    dataset: 'Dataset',
   },
   footer: {
     lastUpdated: 'Last updated',
@@ -143,7 +149,10 @@ const zh: LocaleMessages = {
     noResults: '没有找到符合条件的论文。',
     abstract: '摘要',
     bibtex: 'BibTeX',
+    paper: '论文',
+    project: '项目主页',
     code: '代码',
+    dataset: '数据集',
   },
   footer: {
     lastUpdated: '最近更新',

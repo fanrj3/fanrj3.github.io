@@ -64,6 +64,50 @@ export default function SelectedPublications({ publications, title, enableOnePag
                                 {pub.description}
                             </p>
                         )}
+                        {(pub.url || pub.projectUrl || pub.code || pub.datasetUrl) && (
+                            <div className="flex flex-wrap gap-2 mt-3">
+                                {pub.url && (
+                                    <a
+                                        href={pub.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-xs font-medium text-accent hover:text-accent-dark transition-colors"
+                                    >
+                                        {messages.publications.paper} ↗
+                                    </a>
+                                )}
+                                {pub.projectUrl && (
+                                    <a
+                                        href={pub.projectUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-xs font-medium text-accent hover:text-accent-dark transition-colors"
+                                    >
+                                        {messages.publications.project} ↗
+                                    </a>
+                                )}
+                                {pub.code && (
+                                    <a
+                                        href={pub.code}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-xs font-medium text-accent hover:text-accent-dark transition-colors"
+                                    >
+                                        {messages.publications.code} ↗
+                                    </a>
+                                )}
+                                {pub.datasetUrl && (
+                                    <a
+                                        href={pub.datasetUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-xs font-medium text-accent hover:text-accent-dark transition-colors"
+                                    >
+                                        {messages.publications.dataset} ↗
+                                    </a>
+                                )}
+                            </div>
+                        )}
                     </motion.div>
                 ))}
             </div>

@@ -23,6 +23,10 @@ interface NewsItem {
   content: string;
 }
 
+function sortNewsItems(items: NewsItem[]): NewsItem[] {
+  return [...items].sort((a, b) => b.date.localeCompare(a.date));
+}
+
 type PageData =
   | { type: 'about'; id: string; sections: SectionConfig[] }
   | { type: 'publication'; id: string; config: PublicationPageConfig; publications: Publication[] }
@@ -52,7 +56,7 @@ function processSections(sections: SectionConfig[], locale?: string): SectionCon
         const newsData = section.source ? getTomlContent<{ news: NewsItem[] }>(section.source, locale) : null;
         return {
           ...section,
-          items: newsData?.news || [],
+          items: sortNewsItems(newsData?.news || []),
         };
       }
       default:

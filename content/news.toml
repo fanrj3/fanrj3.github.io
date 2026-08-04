@@ -1,4 +1,8 @@
 [[news]]
+date = "2026-08"
+content = "Our paper **GeoMoE** is available on [arXiv](https://arxiv.org/pdf/2608.01060), with [code](https://github.com/fanrj3/GeoMoE), a [project page](https://fanrj3.github.io/GeoMoE/), and the [VIGOR-M dataset](https://huggingface.co/datasets/Frank0666/VIGOR-M)"
+
+[[news]]
 date = "2026-03"
 content = "Joined Tsinghua Shenzhen International Graduate School as a Research Assistant, working with [Weijia Li](https://liweijia.github.io/)"
 
@@ -15,9 +19,9 @@ date = "2025-10"
 content = "Our paper on raster-based building simplification was published in *Geo-spatial Information Science*"
 
 [[news]]
-date = "2024-10"
-content = "Awarded the National Scholarship for the first time"
-
-[[news]]
 date = "2025-10"
 content = "Awarded the National Scholarship for the second consecutive year"
+
+[[news]]
+date = "2024-10"
+content = "Awarded the National Scholarship for the first time"

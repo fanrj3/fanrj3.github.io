@@ -1,3 +1,23 @@
+@misc{fan2026geomoe,
+  selected={true},
+  title = {One Query, Many Scales: Sparse Mixture-of-Experts for Efficient Hierarchical Cross-View Geo-Localization},
+  author = {Ruijie Fan and Junyan Ye and Qi Zhu and Weijia Li*},
+  year = {2026},
+  month = aug,
+  journal = {arXiv preprint arXiv:2608.01060},
+  eprint = {2608.01060},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CV},
+  url = {https://arxiv.org/pdf/2608.01060},
+  abstract = {Cross-view geo-localization retrieves geo-tagged satellite imagery for a ground-view query. GeoMoE is a sparse mixture-of-experts dual encoder that decouples global multi-scale representation learning from local hierarchical search. Global multi-scale supervision and content-adaptive routing map ground and satellite images across resolutions into a globally comparable embedding space, while probabilistic beam search follows parent-child links to score a compact candidate subset. The work also introduces VIGOR-M, a four-city benchmark with an explicit multi-resolution satellite hierarchy.},
+  description = {A sparse multi-scale dual encoder with probabilistic coarse-to-fine search, introduced together with the VIGOR-M benchmark.},
+  preview = {geomoe_overview.png},
+  keywords = {Cross-View Geo-Localization, Mixture-of-Experts, Hierarchical Retrieval, Remote Sensing, VIGOR-M},
+  project = {https://fanrj3.github.io/GeoMoE/},
+  code = {https://github.com/fanrj3/GeoMoE},
+  dataset = {https://huggingface.co/datasets/Frank0666/VIGOR-M}
+}
+
 @article{fan2025raster,
   selected={true},
   title = {A Raster-Based Method for Building Simplification Considering Shape and Texture Features Based on Remote Sensing Images},
@@ -26,5 +46,5 @@
   description={A zero-shot satellite video tracker built on SAM2 with Kalman Filter-based motion constraints, available on arXiv.},
   preview={satsam2_flag.png},
   keywords={Satellite Video, Object Tracking, SAM2, Kalman Filter, Remote Sensing},
-  code={https://arxiv.org/abs/2511.18264}
+  url={https://arxiv.org/abs/2511.18264}
 }

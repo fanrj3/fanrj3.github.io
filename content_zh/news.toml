@@ -1,4 +1,8 @@
 [[news]]
+date = "2026-08"
+content = "我们的论文 **GeoMoE** 已发布于 [arXiv](https://arxiv.org/pdf/2608.01060)，并公开了[代码](https://github.com/fanrj3/GeoMoE)、[项目主页](https://fanrj3.github.io/GeoMoE/)和 [VIGOR-M 数据集](https://huggingface.co/datasets/Frank0666/VIGOR-M)"
+
+[[news]]
 date = "2026-03"
 content = "加入清华大学深圳国际研究生院，担任研究助理，在李唯嘉副教授指导下工作"
 

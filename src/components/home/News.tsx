@@ -29,7 +29,7 @@ export default function News({ items, title }: NewsProps) {
                 {items.map((item, index) => (
                     <div key={index} className="flex items-start space-x-3">
                         <span className="text-xs text-neutral-500 mt-1 w-16 flex-shrink-0">{item.date}</span>
-                        <div className="text-sm text-neutral-700 dark:text-neutral-300 [&_strong]:font-semibold [&_strong]:text-primary dark:[&_strong]:text-white">
+                        <div className="text-sm text-neutral-700 dark:text-neutral-300 [&_strong]:font-semibold [&_strong]:text-primary dark:[&_strong]:text-white [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-accent-dark">
                             <ReactMarkdown>{item.content}</ReactMarkdown>
                         </div>
                     </div>

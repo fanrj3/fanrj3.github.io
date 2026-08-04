@@ -27,6 +27,8 @@ export interface Publication {
   pmid?: string;
   url?: string;
   code?: string;
+  projectUrl?: string;
+  datasetUrl?: string;
   pdfUrl?: string;
   tags: string[];
   keywords?: string[];
@@ -77,4 +79,3 @@ export type ResearchArea =
   | 'transformer-architectures'
   | 'biomedical-engineering'
   | 'other';
-
