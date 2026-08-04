@@ -317,7 +317,7 @@ export default function Profile({ author, social, features, researchInterests }:
                     title="Visitor Map"
                     src="/visitor-map.html"
                     className="w-[260px] h-[180px] border-0 bg-transparent"
-                    sandbox="allow-scripts allow-popups"
+                    sandbox="allow-scripts allow-popups allow-top-navigation-by-user-activation"
                 />
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{messages.profile.visitorMap}</p>
             </div>
