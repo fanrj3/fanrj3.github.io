@@ -44,19 +44,23 @@
   description={A superpixel-based approach for building simplification and texturing in remote sensing imagery, enhancing map generalization quality.},
   preview={raster_building_pipeline.png},
   keywords={Remote Sensing, Building Simplification, Map Generalization, Superpixel Segmentation},
-  code={https://doi.org/10.1080/10095020.2025.2573369}
+  url={https://doi.org/10.1080/10095020.2025.2573369},
+  code={https://github.com/fanrj3/BuildingSimplificationAndTexturing}
 }
 
-@inproceedings{fan2025satsam2,
+@misc{fan2025satsam2,
   selected={true},
   title = {SatSAM2: Motion-Constrained Video Object Tracking in Satellite Imagery using Promptable SAM2 and Kalman Priors},
   author = {Ruijie Fan and Junyan Ye and Huan Chen and Zilong Huang and Xiaolei Wang and Weijia Li},
   year = {2025},
   month = nov,
-  booktitle = {arXiv},
+  journal = {arXiv preprint arXiv:2511.18264},
+  eprint = {2511.18264},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CV},
   abstract = {Existing satellite video tracking methods often struggle with generalization, requiring scenario-specific training to achieve satisfactory performance, and are prone to track loss in the presence of occlusion. To address these challenges, we propose SatSAM2, a zero-shot satellite video tracker built on SAM2. SatSAM2 introduces two core modules: a Kalman Filter-based Constrained Motion Module (KFCMM) to exploit temporal motion cues and suppress drift, and a Motion-Constrained State Machine (MCSM) to regulate tracking states based on motion dynamics and reliability. Extensive experiments on two satellite tracking benchmarks and a new synthetic benchmark MVOT show that SatSAM2 outperforms both traditional and foundation model-based trackers.},
-  description={A zero-shot satellite video tracker built on SAM2 with Kalman Filter-based motion constraints, available on arXiv.},
+  description={A zero-shot satellite video tracker combining SAM2, Kalman-filter motion constraints, and a state machine for robust tracking under occlusion.},
   preview={satsam2_flag.png},
   keywords={Satellite Video, Object Tracking, SAM2, Kalman Filter, Remote Sensing},
-  url={https://arxiv.org/abs/2511.18264}
+  url={https://arxiv.org/pdf/2511.18264}
 }
