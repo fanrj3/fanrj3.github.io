@@ -386,17 +386,35 @@ body {
 .byte-prose h3 { margin: 42px 0 16px; font-size: 1.4rem; }
 .byte-prose h4 { margin: 34px 0 14px; font-size: 1.12rem; }
 .byte-prose p { margin: 18px 0; }
-.byte-prose ul, .byte-prose ol { margin: 18px 0; padding-left: 1.4rem; }
-.byte-prose li { margin: 7px 0; }
+.byte-prose ul, .byte-prose ol { margin: 18px 0; padding-left: 1.55rem; }
+.byte-prose ul { list-style-type: disc; }
+.byte-prose ol { list-style-type: decimal; }
+.byte-prose ul ul { list-style-type: circle; }
+.byte-prose ul ul ul { list-style-type: square; }
+.byte-prose ol ol { list-style-type: lower-alpha; }
+.byte-prose li { margin: 8px 0; padding-left: 0.2rem; }
+.byte-prose li::marker { color: var(--accent-dark); font-weight: 700; }
+.byte-prose li > p { margin: 8px 0; }
+.byte-prose li > ul, .byte-prose li > ol { margin: 8px 0 10px; }
+.byte-prose strong { color: var(--primary); font-weight: 700; }
 .byte-prose a { color: var(--accent-dark); text-decoration: underline; text-underline-offset: 3px; }
 .byte-inline-icon { display: inline; width: 0.8em; height: 0.8em; margin-left: 3px; vertical-align: 0.04em; }
 .byte-prose :not(pre) > code { padding: 0.15em 0.35em; border: 1px solid var(--neutral-200); border-radius: 3px; background: var(--neutral-100); color: var(--primary); font-family: var(--font-mono); font-size: 0.88em; overflow-wrap: anywhere; }
 .byte-prose figure[data-rehype-pretty-code-figure] { margin: 28px 0; overflow: hidden; border: 1px solid var(--neutral-200); border-radius: 5px; background: var(--neutral-50); }
-.byte-prose figure[data-rehype-pretty-code-figure] figcaption { padding: 9px 15px; border-bottom: 1px solid var(--neutral-200); color: var(--neutral-500); font-family: var(--font-mono); font-size: 0.72rem; }
-.byte-prose pre { overflow-x: auto; padding: 20px; background: transparent !important; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.7; }
+.byte-prose figure[data-rehype-pretty-code-figure] figcaption { padding: 9px 18px; border-bottom: 1px solid var(--neutral-200); color: var(--neutral-500); font-family: var(--font-mono); font-size: 0.72rem; }
+.byte-prose pre { max-width: 100%; overflow-x: auto; background: transparent !important; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.7; }
+.byte-prose figure[data-rehype-pretty-code-figure] code { display: grid; width: max-content; min-width: 100%; padding: 18px 0; color: var(--primary); tab-size: 4; }
+.byte-prose figure[data-rehype-pretty-code-figure] code > [data-line] { min-height: 1.7em; padding: 0 20px; }
+.byte-prose figure[data-rehype-pretty-code-figure] code span { color: var(--shiki-light, inherit); }
+.dark .byte-prose figure[data-rehype-pretty-code-figure] code span { color: var(--shiki-dark, inherit); }
+.byte-prose figure[data-rehype-pretty-code-figure] [data-highlighted-line] { background: color-mix(in srgb, var(--accent) 10%, transparent); box-shadow: inset 2px 0 var(--accent); }
+.byte-prose figure[data-rehype-pretty-code-figure] [data-highlighted-chars] { border-radius: 3px; background: color-mix(in srgb, var(--accent) 18%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent); }
 .byte-prose table { width: 100%; margin: 26px 0; border-collapse: collapse; font-size: 0.9rem; }
 .byte-prose th, .byte-prose td { padding: 10px 12px; border: 1px solid var(--neutral-200); text-align: left; }
-.byte-prose blockquote { margin: 26px 0; padding-left: 20px; border-left: 3px solid var(--accent); color: var(--neutral-600); }
+.byte-prose blockquote { margin: 26px 0; padding: 1px 0 1px 20px; border-left: 3px solid var(--accent); color: var(--neutral-600); }
+.byte-prose blockquote > :first-child { margin-top: 0; }
+.byte-prose blockquote > :last-child { margin-bottom: 0; }
+.byte-prose hr { margin: 48px 0; border: 0; border-top: 1px solid var(--neutral-200); }
 .byte-prose .katex-display { overflow-x: auto; overflow-y: hidden; padding: 12px 0; }
 
 .byte-callout { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 13px; margin: 28px 0; padding: 18px 20px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--neutral-200)); border-radius: 5px; background: color-mix(in srgb, var(--accent) 7%, var(--background)); }
