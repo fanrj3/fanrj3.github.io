@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ByteWorldIndex from '@/components/byte-world/ByteWorldIndex';
-import { getByteWorldEntries } from '@/lib/byteWorld';
+import { getByteWorldIndexEntries } from '@/lib/byteWorld';
 
 export const metadata: Metadata = {
   title: 'Byte World',
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ByteWorldPage() {
   return (
     <main className="byte-page-shell">
-      <ByteWorldIndex entries={getByteWorldEntries()} />
+      <ByteWorldIndex entries={getByteWorldIndexEntries()} />
     </main>
   );
 }

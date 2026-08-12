@@ -1,71 +1,38 @@
 ---
-title: A CPU Rasterizer from First Principles
-description: Building a tiny Python rasterizer around edge functions, barycentric interpolation, a depth buffer, and testable image-space invariants.
-date: 2026-08-10
+title: 纯 Python 实现 CPU 光栅渲染器
+description: 仅借助 SDL2 和 NumPy，从窗口与像素输出开始，逐步实现可实时交互的 CPU 软光栅渲染器。
+date: 2026-08-12
 status: in-progress
+kind: series
+featured: true
 series: Graphics from Scratch
+seriesSlug: cpu-rasterizer
 tags:
   - Computer Graphics
   - Python
   - Rasterization
 ---
 
-## Why a software rasterizer
+> 该项目实现参考 [TinyRenderer](https://github.com/ssloy/tinyrenderer)，感谢开源社区的贡献。项目得到 [GAMES101 课程](https://www.bilibili.com/video/BV1X7411F744) 的启发，旨在完整从零实现一个功能完整的 CPU 软光栅渲染器。
 
-A CPU rasterizer is small enough to understand end to end but rich enough to expose the essential graphics pipeline: coordinate transforms, clipping, coverage, interpolation, visibility, and shading. The first milestone is intentionally modest: render one triangle correctly and make every convention explicit.
+## 总体实现目标
 
-## Triangle coverage
+1. 仅借助 SDL2 和 NumPy 实现
+2. 实时渲染、视角可变化
+3. 支持纹理贴图、光照、法线贴图等功能
+4. 尽可能简洁明了
 
-For an oriented edge from $a$ to $b$, define the edge function
+## 运行效果
 
-$$
-E_{ab}(p) = (p_x-a_x)(b_y-a_y) - (p_y-a_y)(b_x-a_x).
-$$
+<div className="byte-image-pair">
+  <Figure src="/byte-world/cpu-rasterizer/preview.png" alt="CPU 光栅渲染器运行效果 1" />
+  <Figure src="/byte-world/cpu-rasterizer/preview2.png" alt="CPU 光栅渲染器运行效果 2" />
+</div>
 
-After fixing a winding convention, a pixel belongs to the triangle when the three edge functions have compatible signs. Evaluating at pixel centers avoids an implicit half-pixel shift.
+由于没有专门针对大量三角面进行特定优化，实时渲染在三角面数量较多时会出现卡顿现象，但优化这一点并不是本项目的重点。在上面展示的两个实例中，右侧实例可以达到 60-80 FPS，左侧则可能只有 2-3 FPS。
 
-```python title="rasterize.py"
-def edge(a, b, p):
-    return (p[0] - a[0]) * (b[1] - a[1]) - (p[1] - a[1]) * (b[0] - a[0])
+## 章节
 
+每一讲只处理一个明确的问题，正文、代码和实验分别放在独立页面中，后续内容会按实现进度继续补充。
 
-def barycentric(v0, v1, v2, p):
-    area = edge(v0, v1, v2)
-    if abs(area) < 1e-8:
-        return None
-
-    w0 = edge(v1, v2, p) / area
-    w1 = edge(v2, v0, p) / area
-    w2 = edge(v0, v1, p) / area
-    return w0, w1, w2
-```
-
-## Interpolation and visibility
-
-Barycentric coordinates provide interpolation weights for depth, color, normals, and texture coordinates. For depth testing, the smallest view-space or normalized-device-coordinate depth wins, depending on the convention selected for the pipeline.
-
-```python title="depth_test.py"
-weights = barycentric(v0.xy, v1.xy, v2.xy, pixel_center)
-if weights is not None and min(weights) >= 0.0:
-    z = sum(w * vertex.z for w, vertex in zip(weights, (v0, v1, v2)))
-    if z < depth_buffer[y, x]:
-        depth_buffer[y, x] = z
-        framebuffer[y, x] = interpolate_color(weights, v0, v1, v2)
-```
-
-<Callout title="Invariant" type="idea">
-The interpolated barycentric weights should sum to one. Logging that invariant catches winding mistakes, degenerate triangles, and coordinate mismatches early.
-</Callout>
-
-## Tests before features
-
-Before adding lighting or textures, the rasterizer should pass four visual tests:
-
-1. Reversing the triangle winding either preserves coverage or triggers explicit back-face culling.
-2. Two triangles sharing an edge leave no crack and do not double shade the boundary.
-3. Moving a triangle by exactly one pixel translates the output by one pixel.
-4. Swapping draw order does not change the visible result when depth testing is enabled.
-
-## Next iteration
-
-The next step is homogeneous clipping followed by perspective-correct interpolation. That is where a seemingly correct affine implementation begins to fail on textured triangles.
+<SeriesChapters seriesSlug="cpu-rasterizer" />

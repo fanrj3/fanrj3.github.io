@@ -11,6 +11,7 @@ const copy = {
     description: 'Small systems built from first principles. Notes on the mathematics, implementation choices, mistakes, and experiments that made each idea click.',
     count: 'notes',
     read: 'min read',
+    chapters: 'chapters',
     all: 'Notes',
   },
   zh: {
@@ -18,6 +19,7 @@ const copy = {
     description: '从第一性原理实现小型系统，记录数学推导、工程取舍、踩坑过程与验证实验，让理解真正落到代码里。',
     count: '篇笔记',
     read: '分钟',
+    chapters: '讲',
     all: '笔记',
   },
 };
@@ -54,7 +56,11 @@ export default function ByteWorldIndex({ entries }: { entries: ByteWorldEntry[] 
                   <div className="byte-card-meta">
                     <span>{entry.series || 'Build log'}</span>
                     <span>{entry.date}</span>
-                    <span><Clock3 aria-hidden="true" /> {entry.readingTime} {text.read}</span>
+                    {entry.kind === 'series' ? (
+                      <span>{entry.chapterCount ?? 0} {text.chapters}</span>
+                    ) : (
+                      <span><Clock3 aria-hidden="true" /> {entry.readingTime} {text.read}</span>
+                    )}
                   </div>
                   <h3>{entry.title}</h3>
                   <p>{entry.description}</p>

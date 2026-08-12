@@ -11,6 +11,9 @@ export interface ByteWorldMetadata {
   status?: 'draft' | 'in-progress' | 'complete';
   tags?: string[];
   series?: string;
+  seriesSlug?: string;
+  kind?: 'note' | 'series' | 'chapter';
+  chapter?: number;
   order?: number;
   repo?: string;
   demo?: string;
@@ -21,12 +24,13 @@ export interface ByteWorldMetadata {
 export interface ByteWorldEntry extends ByteWorldMetadata {
   slug: string;
   readingTime: number;
+  chapterCount?: number;
 }
 
 export interface TocItem {
   id: string;
   title: string;
-  depth: 2 | 3;
+  depth: 2 | 3 | 4;
 }
 
 const BYTE_WORLD_DIR = path.join(process.cwd(), 'content', 'byte-world');
@@ -80,10 +84,29 @@ export function getByteWorldEntries(): ByteWorldEntry[] {
     });
 }
 
+export function getByteWorldIndexEntries(): ByteWorldEntry[] {
+  const entries = getByteWorldEntries();
+  return entries
+    .filter((entry) => entry.kind !== 'chapter')
+    .map((entry) => ({
+      ...entry,
+      chapterCount: entry.kind === 'series'
+        ? entries.filter((candidate) => candidate.kind === 'chapter' && candidate.seriesSlug === entry.seriesSlug).length
+        : undefined,
+    }));
+}
+
 export function getByteWorldEntry(slug: string): ByteWorldEntry | null {
   const filename = `${slug}.mdx`;
   const filePath = path.join(BYTE_WORLD_DIR, filename);
   return fs.existsSync(filePath) && isPublishedFile(filename) ? readEntry(filename) : null;
+}
+
+export function getByteWorldSeries(seriesSlug: string | undefined): ByteWorldEntry | null {
+  if (!seriesSlug) return null;
+  return getByteWorldEntries().find(
+    (entry) => entry.kind === 'series' && entry.seriesSlug === seriesSlug,
+  ) ?? null;
 }
 
 export function getByteWorldToc(slug: string): TocItem[] {
@@ -93,7 +116,7 @@ export function getByteWorldToc(slug: string): TocItem[] {
 
   return content
     .split(/\r?\n/)
-    .map((line) => line.match(/^(##|###)\s+(.+)$/))
+    .map((line) => line.match(/^(##|###|####)\s+(.+)$/))
     .filter((match): match is RegExpMatchArray => Boolean(match))
     .map((match) => {
       const title = match[2]
@@ -103,7 +126,7 @@ export function getByteWorldToc(slug: string): TocItem[] {
       return {
         id: slugger.slug(title),
         title,
-        depth: match[1].length as 2 | 3,
+        depth: match[1].length as 2 | 3 | 4,
       };
     });
 }
@@ -112,7 +135,19 @@ export function getAdjacentEntries(slug: string): {
   previous: ByteWorldEntry | null;
   next: ByteWorldEntry | null;
 } {
-  const entries = getByteWorldEntries();
+  const current = getByteWorldEntry(slug);
+  if (current?.kind === 'chapter' && current.seriesSlug) {
+    const chapters = getByteWorldEntries()
+      .filter((entry) => entry.kind === 'chapter' && entry.seriesSlug === current.seriesSlug)
+      .sort((a, b) => (a.chapter ?? a.order ?? 0) - (b.chapter ?? b.order ?? 0));
+    const chapterIndex = chapters.findIndex((entry) => entry.slug === slug);
+    return {
+      previous: chapterIndex > 0 ? chapters[chapterIndex - 1] : null,
+      next: chapterIndex >= 0 ? chapters[chapterIndex + 1] ?? null : null,
+    };
+  }
+
+  const entries = getByteWorldIndexEntries();
   const currentIndex = entries.findIndex((entry) => entry.slug === slug);
   return {
     previous: currentIndex >= 0 ? entries[currentIndex + 1] ?? null : null,

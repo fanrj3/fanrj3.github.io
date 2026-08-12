@@ -7,24 +7,31 @@ import type { ByteWorldEntry, TocItem } from '@/lib/byteWorld';
 
 type Props = {
   entry: ByteWorldEntry;
+  seriesParent: ByteWorldEntry | null;
   toc: TocItem[];
   previous: ByteWorldEntry | null;
   next: ByteWorldEntry | null;
   children: React.ReactNode;
 };
 
-export default function ByteWorldArticle({ entry, toc, previous, next, children }: Props) {
+export default function ByteWorldArticle({ entry, seriesParent, toc, previous, next, children }: Props) {
   const locale = useLocaleStore((state) => state.locale);
   const zh = locale.startsWith('zh');
 
   return (
     <div className="byte-article-shell">
       <header className="byte-article-header">
-        <Link href="/byte-world" className="byte-back-link"><ArrowLeft aria-hidden="true" /> Byte World</Link>
+        <Link
+          href={entry.kind === 'chapter' && seriesParent ? `/byte-world/${seriesParent.slug}` : '/byte-world'}
+          className="byte-back-link"
+        >
+          <ArrowLeft aria-hidden="true" />
+          {entry.kind === 'chapter' ? entry.series : 'Byte World'}
+        </Link>
         <div className="byte-card-meta">
           <span>{entry.series || (zh ? '实现笔记' : 'Implementation note')}</span>
           <span>{entry.date}</span>
-          <span><Clock3 aria-hidden="true" /> {entry.readingTime} {zh ? '分钟' : 'min read'}</span>
+          {entry.kind !== 'series' && <span><Clock3 aria-hidden="true" /> {entry.readingTime} {zh ? '分钟' : 'min read'}</span>}
         </div>
         <h1>{entry.title}</h1>
         <p>{entry.description}</p>
@@ -44,7 +51,13 @@ export default function ByteWorldArticle({ entry, toc, previous, next, children 
             <strong>{zh ? '本文目录' : 'On this page'}</strong>
             <nav>
               {toc.map((item) => (
-                <a key={item.id} href={`#${item.id}`} className={item.depth === 3 ? 'is-nested' : ''}>{item.title}</a>
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={item.depth === 4 ? 'is-deep' : item.depth === 3 ? 'is-nested' : ''}
+                >
+                  {item.title}
+                </a>
               ))}
             </nav>
           </aside>

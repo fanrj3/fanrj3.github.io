@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ByteWorldArticle from '@/components/byte-world/ByteWorldArticle';
-import { getAdjacentEntries, getByteWorldEntries, getByteWorldEntry, getByteWorldToc } from '@/lib/byteWorld';
+import { getAdjacentEntries, getByteWorldEntries, getByteWorldEntry, getByteWorldSeries, getByteWorldToc } from '@/lib/byteWorld';
 
 export const dynamicParams = false;
 
@@ -30,7 +30,7 @@ export default async function ByteWorldEntryPage({ params }: { params: Promise<{
 
   return (
     <main className="byte-page-shell">
-      <ByteWorldArticle entry={entry} toc={getByteWorldToc(slug)} {...adjacent}>
+      <ByteWorldArticle entry={entry} seriesParent={getByteWorldSeries(entry.seriesSlug)} toc={getByteWorldToc(slug)} {...adjacent}>
         <Content />
       </ByteWorldArticle>
     </main>

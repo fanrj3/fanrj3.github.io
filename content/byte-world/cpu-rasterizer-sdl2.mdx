@@ -1,0 +1,340 @@
+---
+title: 第一讲：SDL2 的实现
+description: 封装 SDLApplication，理解窗口创建、资源生命周期、输入事件、相机控制与每帧像素呈现。
+date: 2026-08-12
+status: complete
+kind: chapter
+series: 纯 Python CPU 光栅渲染器
+seriesSlug: cpu-rasterizer
+chapter: 1
+order: 1
+tags:
+  - SDL2
+  - Python
+  - Realtime Rendering
+---
+
+## SDL2：跨平台图形输出工具
+
+想要在屏幕上绘制出图形（例如打开一个窗口，将坐标为 (x, y) 的像素点设置为
+某种颜色），我们需要调用各个操作系统预留的GUI接口。为了避免直接处理复杂的Windows 
+API（同时避免在不同操作系统上编写不同的GUI代码），本项目使用了SDL2作为窗口管理和图形输出的工具。SDL2是一个跨平台的多媒体
+库，提供了对窗口、渲染、音频等功能的支持，非常适合用于游戏开发和图形渲染。
+
+在项目中我们将其封装到`sdl_app.py`中，主要功能包括：
+- 窗口参数类`AppConfig`，用于设置窗口的宽高、标题等属性。
+- `SDLApplication`类，负责初始化SDL2、创建窗口和渲染器，并提供绘制像素和
+更新窗口的功能。
+
+### AppConfig类
+
+```python
+@dataclass(slots=True)
+class AppConfig:
+    window_width: int = 800
+    window_height: int = 800
+    move_speed: float = 1.5
+    mouse_sensitivity: float = 0.0025
+    vsync: bool = True
+```
+窗口参数主要包括：窗口长宽、高度、移动速度、鼠标灵敏度和垂直同步选项。
+
+### SDLApplication类
+
+#### 初始化SDLApplication类
+
+```python
+class SDLApplication:
+    """Own SDL resources and run the realtime application loop."""
+
+    def __init__(
+        self,
+        scene: Scene,
+        camera: FreeCamera,
+        software_renderer: RealtimeRenderer,
+        config: AppConfig,
+    ) -> None:
+        self.scene = scene
+        self.camera = camera
+        self.software_renderer = software_renderer
+        self.config = config
+        self.window = None
+        self.presenter = None
+        self.texture = None
+        self.running = False
+        self.mouse_captured = False
+        self.shading_mode = 0
+        self.initial_position = camera.position.copy()
+        self.initial_yaw = camera.yaw
+        self.initial_pitch = camera.pitch
+```
+每个`SDLApplication`实例都拥有一个场景、一个自由相机、一个实时渲染器和
+窗口配置。它负责初始化SDL2，创建窗口和渲染器，并提供绘制像素和更新窗口的功能。
+
+#### 初始化SDL2
+
+```python
+def _initialize_sdl(self) -> None:
+    if sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO) != 0:
+        raise RuntimeError(f"SDL_Init failed: {_sdl_error()}")
+
+    self.window = sdl2.SDL_CreateWindow(
+        b"TinyRenderer CPU - compiling...",
+        sdl2.SDL_WINDOWPOS_CENTERED,
+        sdl2.SDL_WINDOWPOS_CENTERED,
+        self.config.window_width,
+        self.config.window_height,
+        sdl2.SDL_WINDOW_RESIZABLE | sdl2.SDL_WINDOW_ALLOW_HIGHDPI,
+    )
+    if not self.window:
+        self._shutdown_sdl()
+        raise RuntimeError(f"SDL_CreateWindow failed: {_sdl_error()}")
+
+    flags = sdl2.SDL_RENDERER_ACCELERATED
+    if self.config.vsync:
+        flags |= sdl2.SDL_RENDERER_PRESENTVSYNC
+    self.presenter = sdl2.SDL_CreateRenderer(self.window, -1, flags)
+    if not self.presenter:
+        # Some remote/virtual desktops expose only SDL's software presenter.
+        self.presenter = sdl2.SDL_CreateRenderer(self.window, -1, sdl2.SDL_RENDERER_SOFTWARE)
+    if not self.presenter:
+        self._shutdown_sdl()
+        raise RuntimeError(f"SDL_CreateRenderer failed: {_sdl_error()}")
+
+    sdl2.SDL_RenderSetLogicalSize(
+        self.presenter, self.software_renderer.width, self.software_renderer.height
+    )
+    self.texture = sdl2.SDL_CreateTexture(
+        self.presenter,
+        sdl2.SDL_PIXELFORMAT_BGR24,
+        sdl2.SDL_TEXTUREACCESS_STREAMING,
+        self.software_renderer.width,
+        self.software_renderer.height,
+    )
+    if not self.texture:
+        self._shutdown_sdl()
+        raise RuntimeError(f"SDL_CreateTexture failed: {_sdl_error()}")
+```
+在运行开始时，我们首先需要使用`SDL`初始化视频子系统，这里的
+`sdl2.SDL_INIT_VIDEO == 0x00000020`，即十进制32，将这个值传递给`sdl2.SDL_Init`
+函数的意思即代表初始化视频子系统。如果初始化失败，`SDL_Init`函数会返回一个非零值，我们
+可以通过`_sdl_error()`函数获取错误信息并抛出异常。
+
+视频子系统初始化时，SDL会准备与操作系统窗口管理器的连接、显示设备、显示模式和
+像素格式等，同时初始化事件子系统，以便我们可以接收来自操作系统的事件（例如键盘输入、鼠标移动等）。
+
+随后，`SDL_CreateWindow`函数创建窗口，传入标题、窗口位置、大小和标志参数。
+这里我们使用了`SDL_WINDOWPOS_CENTERED`来让窗口在屏幕中央显示，并设置
+窗口大小为配置中的宽高。标志参数包括`SDL_WINDOW_RESIZABLE`
+（允许用户调整窗口大小）和`SDL_WINDOW_ALLOW_HIGHDPI`（允许高DPI显示）。
+
+如果创建失败，同样抛出异常。
+
+`sdl2.SDL_CreateRenderer`为已经创建的窗口建立一个SDL渲染器，渲染器需要
+知道要在什么窗口上进行绘制，因此需要传入窗口句柄`self.window`。我们首先尝试创建一个硬件加速的渲染器，
+如果失败，则尝试创建一个软件渲染器。这里的`self.presenter`会保存渲染器的
+句柄，以供后续绘制像素和更新窗口使用。
+
+这里的“硬件加速”只针对 SDL 最后的纹理复制与窗口呈现；三角形光栅化和逐像素着色仍由 `software_renderer` 在 CPU 上完成。
+
+`sdl2.SDL_RenderSetLogicalSize`函数设置了渲染器的逻辑渲染尺寸。为什么要区分
+逻辑渲染和实际的窗口大小呢？实际上，SDL窗口大小可以由用户通过拖拽调整，
+但是渲染质量并不直接和窗口大小绑定，而是一致地渲染到一个固定的逻辑尺寸上，
+再由SDL根据窗口大小进行缩放。SDL会保持渲染内容的纵横比，并在窗口大小变化时
+自动进行缩放，保留黑边，从而保证渲染内容不会被拉伸或压缩。
+
+`sdl2.SDL_CreateTexture`最后创建纹理对象，保存具体的像素数据。
+`SDL_PIXELFORMAT_BGR24`指定具体的像素格式为BGR24，即每个像素占用3个字节，
+分别表示蓝色、绿色和红色通道。`sdl2.SDL_TEXTUREACCESS_STREAMING`表示纹理
+是可流式访问的，我们可以在运行时动态更新纹理内容。
+
+#### 关闭SDL2
+
+```python
+def _shutdown_sdl(self) -> None:
+    sdl2.SDL_SetRelativeMouseMode(sdl2.SDL_FALSE)
+    if self.texture:
+        sdl2.SDL_DestroyTexture(self.texture)
+        self.texture = None
+    if self.presenter:
+        sdl2.SDL_DestroyRenderer(self.presenter)
+        self.presenter = None
+    if self.window:
+        sdl2.SDL_DestroyWindow(self.window)
+        self.window = None
+    sdl2.SDL_Quit()
+```
+在应用关闭时我们需要释放相关资源，避免内存泄露。`sdl2.SDL_SetRelativeMouseMode(sdl2.SDL_FALSE)`
+用于关闭**鼠标相对模式**，恢复鼠标的正常行为。随后，
+`SDL_DestroyTexture`、`SDL_DestroyRenderer`和`SDL_DestroyWindow`
+分别销毁纹理、渲染器和窗口对象。
+鼠标相对模式在开启时会在每个鼠标事件中返回鼠标相对于上一个位置的偏移量。
+
+#### 处理窗口事件
+
+```python
+def _process_events(self, event: sdl2.SDL_Event) -> None:
+    while sdl2.SDL_PollEvent(ctypes.byref(event)):
+        if event.type == sdl2.SDL_QUIT:
+            self.running = False
+        elif event.type == sdl2.SDL_MOUSEMOTION and self.mouse_captured:
+            self.camera.rotate(
+                float(event.motion.xrel),
+                float(event.motion.yrel),
+                self.config.mouse_sensitivity,
+            )
+        elif event.type == sdl2.SDL_MOUSEBUTTONDOWN and not self.mouse_captured:
+            if event.button.button == sdl2.SDL_BUTTON_LEFT:
+                self._set_mouse_capture(True)
+        elif event.type == sdl2.SDL_KEYDOWN and event.key.repeat == 0:
+            key = event.key.keysym.sym
+            if key == sdl2.SDLK_ESCAPE:
+                self.running = False
+            elif key == sdl2.SDLK_TAB:
+                self._set_mouse_capture(not self.mouse_captured)
+            elif key == sdl2.SDLK_r:
+                self.camera.position[:] = self.initial_position
+                self.camera.yaw = self.initial_yaw
+                self.camera.pitch = self.initial_pitch
+            elif sdl2.SDLK_1 <= key <= sdl2.SDLK_4:
+                self.shading_mode = int(key - sdl2.SDLK_1)
+        elif event.type == sdl2.SDL_WINDOWEVENT:
+            if event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
+                self._set_mouse_capture(False)
+```
+主要处理了以下几类事件：
+- **SDL_QUIT**：当用户点击窗口的关闭按钮时，设置`self.running = False`，退出主循环。
+- **SDL_MOUSEMOTION**：当鼠标移动时，如果鼠标被捕获，则调用相机的`rotate`方法，
+根据鼠标的相对移动量调整相机的朝向。
+- **SDL_MOUSEBUTTONDOWN**：当鼠标按下时，如果鼠标未被捕获且按下的是左键，则调用`_set_mouse_capture(True)`捕获鼠标。
+- **SDL_KEYDOWN**：当按下键盘按键时，根据按键的不同执行不同操作：
+  - `SDLK_ESCAPE`：退出应用。
+  - `SDLK_TAB`：切换鼠标捕获状态。
+  - `SDLK_r`：重置相机位置和朝向。
+  - `SDLK_1`到`SDLK_4`：切换着色模式。
+- **SDL_WINDOWEVENT**：当窗口事件发生时，如果窗口失去焦点，则释放鼠标捕获。
+
+#### 处理相机移动情况
+
+```python
+def _move_camera(self, delta_time: float) -> None:
+    keyboard = sdl2.SDL_GetKeyboardState(None)
+    speed = self.config.move_speed
+    if keyboard[sdl2.SDL_SCANCODE_LSHIFT] or keyboard[sdl2.SDL_SCANCODE_RSHIFT]:
+        speed *= 3.0
+    distance = speed * delta_time
+    forward = distance * (
+        int(bool(keyboard[sdl2.SDL_SCANCODE_W]))
+        - int(bool(keyboard[sdl2.SDL_SCANCODE_S]))
+    )
+    right = distance * (
+        int(bool(keyboard[sdl2.SDL_SCANCODE_D]))
+        - int(bool(keyboard[sdl2.SDL_SCANCODE_A]))
+    )
+    up = distance * (
+        int(bool(keyboard[sdl2.SDL_SCANCODE_SPACE]))
+        - int(bool(keyboard[sdl2.SDL_SCANCODE_C]))
+    )
+    self.camera.move_local(forward, right, up)
+```
+
+为了体感上相机移动的一致性（因为每一帧渲染时间可能不同），我们需要根据每一帧
+的时间差来计算相机移动的距离。`delta_time`表示相邻两次主循环之间经过的时间，也就是近似的上一帧完整时长。
+根据按键情况，我们计算`forward`、`right`和`up`三个方向的移动距离，
+并调用相机的`move_local`方法来更新相机的位置。
+
+#### 把像素数据画到屏幕上吧！
+
+```python
+def _present(self) -> None:
+    result = sdl2.SDL_UpdateTexture(
+        self.texture,
+        None,
+        ctypes.c_void_p(self.software_renderer.pixel_pointer()),
+        self.software_renderer.width * 3,
+    )
+    if result != 0:
+        raise RuntimeError(f"SDL_UpdateTexture failed: {_sdl_error()}")
+    sdl2.SDL_RenderClear(self.presenter)
+    sdl2.SDL_RenderCopy(self.presenter, self.texture, None, None)
+    sdl2.SDL_RenderPresent(self.presenter)
+```
+我们每一帧会计算出当前窗口下的像素数据，为了交给SDL显示到窗口上，
+首先需要调用`SDL_UpdateTexture`将像素数据更新到纹理对象中。
+这里的`pixel_pointer()`方法返回了像素数据的指针。`None`表示更新整个纹理区域，
+如果传入 SDL_Rect，则只更新纹理的指定区域。
+`self.software_renderer.width * 3`表示每一行像素数据的字节数，方便SDL正确
+读取像素数据。
+
+`SDL_RenderClear`先把上一帧的后台缓冲区清除，`SDL_RenderCopy`将纹理复制到
+后台缓冲区。这个时候画面仍然还没有显示到屏幕上，直到调用
+`SDL_RenderPresent`才会将其呈现到窗口。
+
+<SDLFramePipeline />
+
+#### 运行主循环
+
+```python
+def run(self, max_frames: int | None = None) -> int:
+    """Run until quit, or for ``max_frames`` when used by automated tests."""
+
+    self._initialize_sdl()
+    try:
+        self.running = True
+        event = sdl2.SDL_Event()
+        previous_time = time.perf_counter()
+        title_update_started = previous_time
+        frame_count = 0
+        total_frame_count = 0
+        accumulated_render_time = 0.0
+
+        while self.running:
+            now = time.perf_counter()
+            delta_time = min(now - previous_time, 0.1)
+            previous_time = now
+            self._process_events(event)
+            self._move_camera(delta_time)
+
+            render_started = time.perf_counter()
+            self.software_renderer.render(
+                self.scene, self.camera, shading_mode=self.shading_mode
+            )
+            render_time = time.perf_counter() - render_started
+            self._present()
+
+            frame_count += 1
+            total_frame_count += 1
+            accumulated_render_time += render_time
+            if max_frames is not None and total_frame_count >= max_frames:
+                self.running = False
+            elapsed = now - title_update_started
+            if elapsed >= 0.5:
+                fps = frame_count / elapsed
+                average_render_ms = accumulated_render_time * 1000.0 / frame_count
+                title = (
+                    f"TinyRenderer CPU | {fps:5.1f} FPS | "
+                    f"CPU render {average_render_ms:5.2f} ms | "
+                    f"{SHADING_NAMES[self.shading_mode]}"
+                )
+                sdl2.SDL_SetWindowTitle(self.window, title.encode("utf-8"))
+                frame_count = 0
+                accumulated_render_time = 0.0
+                title_update_started = now
+        return 0
+    finally:
+        self._shutdown_sdl()
+```
+
+前面的内容全部理解之后，这一步就非常清晰明了了。
+
+只要`self.running`为True，我们就会不断循环，处理事件、移动相机、渲染场景
+并显示到窗口上。
+
+具体的渲染实际上全部都在：
+```python
+self.software_renderer.render(
+    self.scene, self.camera, shading_mode=self.shading_mode
+)
+```
+中，渲染器获取场景信息、获取相机位姿信息，根据渲染模式计算每个像素的颜色值，并
+将结果写入到像素缓冲区中。渲染完成后，我们调用`_present()`方法将像素数据显示到窗口上。

@@ -38,7 +38,11 @@ featured: false
 
 Required fields: `title`, `description`, and `date`.
 
-Use `featured: true` on at most one note. It becomes the large entry at the top of `/byte-world/`.
+Use `featured: true` on at most one entry to place it first in `/byte-world/`.
+
+## Multi-chapter series
+
+Use one `kind: series` entry as the series overview, then create one `kind: chapter` MDX file per lesson. Give every chapter the same `seriesSlug`, plus its `chapter` number. Chapter entries are kept out of the main Byte World index and are listed by `<SeriesChapters seriesSlug="..." />` on the series page.
 
 ## Writing features
 

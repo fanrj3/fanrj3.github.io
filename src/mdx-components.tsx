@@ -1,6 +1,8 @@
 import type { MDXComponents } from 'mdx/types';
 import Link from 'next/link';
 import { ExternalLink, Lightbulb, TriangleAlert } from 'lucide-react';
+import SDLFramePipeline from '@/components/byte-world/SDLFramePipeline';
+import SeriesChapters from '@/components/byte-world/SeriesChapters';
 
 type CalloutProps = {
   title?: string;
@@ -46,6 +48,8 @@ const components: MDXComponents = {
   },
   Callout,
   Figure,
+  SDLFramePipeline,
+  SeriesChapters,
 };
 
 export function useMDXComponents(): MDXComponents {
