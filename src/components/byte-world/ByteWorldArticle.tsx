@@ -64,14 +64,16 @@ export default function ByteWorldArticle({ entry, seriesParent, toc, previous, n
         )}
       </div>
 
-      <nav className="byte-adjacent" aria-label={zh ? '相邻文章' : 'Adjacent notes'}>
-        {previous ? (
-          <Link href={`/byte-world/${previous.slug}`}><ArrowLeft aria-hidden="true" /><span><small>{zh ? '上一篇' : 'Previous'}</small>{previous.title}</span></Link>
-        ) : <span />}
-        {next ? (
-          <Link href={`/byte-world/${next.slug}`}><span><small>{zh ? '下一篇' : 'Next'}</small>{next.title}</span><ArrowRight aria-hidden="true" /></Link>
-        ) : <span />}
-      </nav>
+      {(previous || next) && entry.kind !== 'series' && (
+        <nav className="byte-adjacent" aria-label={zh ? '相邻文章' : 'Adjacent notes'}>
+          {previous ? (
+            <Link href={`/byte-world/${previous.slug}`}><ArrowLeft aria-hidden="true" /><span><small>{zh ? '上一篇' : 'Previous'}</small>{previous.title}</span></Link>
+          ) : <span />}
+          {next ? (
+            <Link href={`/byte-world/${next.slug}`}><span><small>{zh ? '下一篇' : 'Next'}</small>{next.title}</span><ArrowRight aria-hidden="true" /></Link>
+          ) : <span />}
+        </nav>
+      )}
     </div>
   );
 }
