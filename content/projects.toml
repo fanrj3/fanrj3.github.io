@@ -1,16 +1,67 @@
 type = "card"
 title = "Projects"
-description = "Personal projects and experiments."
+description = "Research systems, interactive experiments, and open-source tools. Each entry points to the artifact itself: a project page, repository, paper, or live demo."
 
 [[items]]
-title = "ETO Droplet: Three-Body Problem Droplet Simulator"
-subtitle = "3D Interactive Simulator"
+title = "GeoMoE"
+subtitle = "Cross-view geo-localization"
+date = "2026"
+image = "/papers/geomoe_overview.png"
+content = "A sparse mixture-of-experts approach for efficient hierarchical cross-view geo-localization across multiple spatial scales."
+tags = ["Geo-localization", "Mixture of Experts", "Remote Sensing"]
+[[items.links]]
+label = "Project Page"
+href = "https://fanrj3.github.io/GeoMoE/"
+kind = "project"
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/GeoMoE"
+kind = "github"
+[[items.links]]
+label = "Paper"
+href = "https://arxiv.org/abs/2608.01060"
+kind = "paper"
+
+[[items]]
+title = "SatSAM2"
+subtitle = "Satellite video object tracking"
+date = "2026"
+image = "/papers/satsam2_flag.png"
+content = "A zero-shot tracker that combines promptable SAM2 with constrained motion modeling and state-aware recovery for small and occluded satellite targets."
+tags = ["SAM2", "Object Tracking", "Satellite Video"]
+[[items.links]]
+label = "Project Page"
+href = "https://fanrj3.github.io/SatSAM2/"
+kind = "project"
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/SatSAM2"
+kind = "github"
+[[items.links]]
+label = "Paper"
+href = "https://arxiv.org/abs/2511.18264"
+kind = "paper"
+
+[[items]]
+title = "ETO Droplet"
+subtitle = "3D interactive simulator"
 date = "2025"
-content = """A 3D interactive simulator based on WebGL technology that recreates the iconic "Droplet" weapon from Liu Cixin's *The Three-Body Problem*. Players control an advanced alien probe tasked with destroying human spacecraft fleets.
+image = "/eto_architecture.png"
+content = "A WebGL simulation of the Droplet from *The Three-Body Problem*, with high-speed flight, fleet behavior, cinematic cameras, and desktop/web builds."
+tags = ["Three.js", "WebGL", "Electron"]
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/eto"
+kind = "github"
 
-**Features:** High-speed physics simulation, volumetric particle explosion effects, intelligent AI fleet mechanics, cinematic camera system, immersive audio system, multiple input support (keyboard, mouse, game controller), cross-platform (web + desktop).
-
-**Tech Stack:** Three.js (r181), Vite 7.2, Electron 39.2
-
-[GitHub Repository](https://github.com/fanrj3/eto)"""
-tags = ["Three.js", "WebGL", "Game", "Interactive"]
+[[items]]
+title = "Building Simplification and Texturing"
+subtitle = "Remote-sensing geometry pipeline"
+date = "2025"
+image = "/papers/raster_building_pipeline.png"
+content = "An implementation companion for raster-based building simplification that considers both shape and texture cues from remote-sensing imagery."
+tags = ["Building Simplification", "Computer Vision", "Remote Sensing"]
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/BuildingSimplificationAndTexturing"
+kind = "github"

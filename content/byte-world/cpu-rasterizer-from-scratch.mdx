@@ -1,0 +1,71 @@
+---
+title: A CPU Rasterizer from First Principles
+description: Building a tiny Python rasterizer around edge functions, barycentric interpolation, a depth buffer, and testable image-space invariants.
+date: 2026-08-10
+status: in-progress
+series: Graphics from Scratch
+tags:
+  - Computer Graphics
+  - Python
+  - Rasterization
+---
+
+## Why a software rasterizer
+
+A CPU rasterizer is small enough to understand end to end but rich enough to expose the essential graphics pipeline: coordinate transforms, clipping, coverage, interpolation, visibility, and shading. The first milestone is intentionally modest: render one triangle correctly and make every convention explicit.
+
+## Triangle coverage
+
+For an oriented edge from $a$ to $b$, define the edge function
+
+$$
+E_{ab}(p) = (p_x-a_x)(b_y-a_y) - (p_y-a_y)(b_x-a_x).
+$$
+
+After fixing a winding convention, a pixel belongs to the triangle when the three edge functions have compatible signs. Evaluating at pixel centers avoids an implicit half-pixel shift.
+
+```python title="rasterize.py"
+def edge(a, b, p):
+    return (p[0] - a[0]) * (b[1] - a[1]) - (p[1] - a[1]) * (b[0] - a[0])
+
+
+def barycentric(v0, v1, v2, p):
+    area = edge(v0, v1, v2)
+    if abs(area) < 1e-8:
+        return None
+
+    w0 = edge(v1, v2, p) / area
+    w1 = edge(v2, v0, p) / area
+    w2 = edge(v0, v1, p) / area
+    return w0, w1, w2
+```
+
+## Interpolation and visibility
+
+Barycentric coordinates provide interpolation weights for depth, color, normals, and texture coordinates. For depth testing, the smallest view-space or normalized-device-coordinate depth wins, depending on the convention selected for the pipeline.
+
+```python title="depth_test.py"
+weights = barycentric(v0.xy, v1.xy, v2.xy, pixel_center)
+if weights is not None and min(weights) >= 0.0:
+    z = sum(w * vertex.z for w, vertex in zip(weights, (v0, v1, v2)))
+    if z < depth_buffer[y, x]:
+        depth_buffer[y, x] = z
+        framebuffer[y, x] = interpolate_color(weights, v0, v1, v2)
+```
+
+<Callout title="Invariant" type="idea">
+The interpolated barycentric weights should sum to one. Logging that invariant catches winding mistakes, degenerate triangles, and coordinate mismatches early.
+</Callout>
+
+## Tests before features
+
+Before adding lighting or textures, the rasterizer should pass four visual tests:
+
+1. Reversing the triangle winding either preserves coverage or triggers explicit back-face culling.
+2. Two triangles sharing an edge leave no crack and do not double shade the boundary.
+3. Moving a triangle by exactly one pixel translates the output by one pixel.
+4. Swapping draw order does not change the visible result when depth testing is enabled.
+
+## Next iteration
+
+The next step is homogeneous clipping followed by perspective-correct interpolation. That is where a seemingly correct affine implementation begins to fail on textured triangles.

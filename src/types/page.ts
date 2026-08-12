@@ -22,6 +22,14 @@ export interface CardItem {
     tags?: string[];
     link?: string;
     image?: string;
+    status?: string;
+    links?: CardLink[];
+}
+
+export interface CardLink {
+    label: string;
+    href: string;
+    kind?: 'project' | 'github' | 'paper' | 'demo';
 }
 
 export interface CardPageConfig extends BasePageConfig {

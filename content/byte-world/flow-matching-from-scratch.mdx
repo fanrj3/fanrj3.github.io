@@ -1,0 +1,96 @@
+---
+title: Flow Matching from Scratch
+description: A minimal path from conditional probability paths to a working PyTorch vector field, with the implementation choices that matter.
+date: 2026-08-12
+status: in-progress
+series: Generative Models
+tags:
+  - Flow Matching
+  - PyTorch
+  - Generative Models
+featured: true
+---
+
+## Why build it
+
+Flow matching becomes much easier to reason about when the model, probability path, and numerical solver are kept separate. The goal of this implementation is not to reproduce a large image model. It is to make every moving part visible in a two-dimensional toy problem before adding architectural complexity.
+
+<Callout title="Learning target" type="idea">
+The important object is a time-dependent vector field. Training asks the network to recover that field; sampling only integrates the resulting ordinary differential equation.
+</Callout>
+
+## The probability path
+
+Let $x_0 \sim p_0$ be a simple source sample and $x_1 \sim p_1$ a data sample. A linear conditional path is
+
+$$
+x_t = (1-t)x_0 + tx_1, \qquad t \in [0,1].
+$$
+
+Its conditional velocity is particularly simple:
+
+$$
+u_t(x_t\mid x_1) = \frac{d x_t}{dt} = x_1 - x_0.
+$$
+
+This gives a supervised regression target without simulating the ODE during training.
+
+## A minimal implementation
+
+The network receives the noisy point and time. A small Fourier embedding prevents time from being represented by a single poorly scaled scalar.
+
+```python title="flow.py"
+import torch
+from torch import nn
+
+
+class VectorField(nn.Module):
+    def __init__(self, width: int = 128):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(3, width),
+            nn.SiLU(),
+            nn.Linear(width, width),
+            nn.SiLU(),
+            nn.Linear(width, 2),
+        )
+
+    def forward(self, x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
+        return self.net(torch.cat([x, t], dim=-1))
+
+
+def flow_matching_loss(model, x0, x1):
+    t = torch.rand(x0.shape[0], 1, device=x0.device)
+    xt = (1 - t) * x0 + t * x1
+    target_velocity = x1 - x0
+    return (model(xt, t) - target_velocity).square().mean()
+```
+
+### Sampling with Euler integration
+
+Sampling starts from $p_0$ and follows the learned field. Euler integration is deliberately used first because its errors are easy to see.
+
+```python title="sample.py"
+@torch.no_grad()
+def sample(model, x, steps=100):
+    dt = 1.0 / steps
+    for i in range(steps):
+        t = torch.full((x.shape[0], 1), i * dt, device=x.device)
+        x = x + dt * model(x, t)
+    return x
+```
+
+## What to verify
+
+1. Plot the learned vector field at several values of $t$, not only the final samples.
+2. Compare Euler and Heun integration while keeping the trained model fixed.
+3. Track the endpoint error as the number of solver steps changes.
+4. Test curved or variance-preserving paths after the linear path is understood.
+
+<Callout title="Common failure" type="warning">
+Good-looking endpoint samples do not prove that the learned dynamics are correct. Inspect intermediate marginals and vector directions as well.
+</Callout>
+
+## Next iteration
+
+The next version will add conditional flow matching for labeled mixtures, Heun integration, and a small interactive vector-field viewer.

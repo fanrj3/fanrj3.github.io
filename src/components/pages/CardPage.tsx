@@ -2,26 +2,14 @@
 
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { CardPageConfig } from '@/types/page';
+import { ArrowUpRight, BookOpen, Github, Globe2, Play } from 'lucide-react';
+import { CardPageConfig, type CardLink } from '@/types/page';
 
 const markdownComponents = {
     p: ({ children }: React.ComponentProps<'p'>) => <p className="mb-3 last:mb-0">{children}</p>,
     ul: ({ children }: React.ComponentProps<'ul'>) => <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>,
     ol: ({ children }: React.ComponentProps<'ol'>) => <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>,
     li: ({ children }: React.ComponentProps<'li'>) => <li className="mb-1">{children}</li>,
-    a: ({ ...props }) => (
-        <a
-            {...props}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent font-medium transition-all duration-200 rounded hover:bg-accent/10 hover:shadow-sm"
-        />
-    ),
-    blockquote: ({ children }: React.ComponentProps<'blockquote'>) => (
-        <blockquote className="border-l-4 border-accent/50 pl-4 italic my-4 text-neutral-600 dark:text-neutral-500">
-            {children}
-        </blockquote>
-    ),
     strong: ({ children }: React.ComponentProps<'strong'>) => <strong className="font-semibold text-primary">{children}</strong>,
     em: ({ children }: React.ComponentProps<'em'>) => <em className="italic">{children}</em>,
     code: ({ children }: React.ComponentProps<'code'>) => (
@@ -29,61 +17,83 @@ const markdownComponents = {
     ),
 };
 
+function ProjectLink({ link }: { link: CardLink }) {
+    const icons = {
+        project: Globe2,
+        github: Github,
+        paper: BookOpen,
+        demo: Play,
+    };
+    const Icon = icons[link.kind || 'project'] || ArrowUpRight;
+    return (
+        <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={link.kind === 'project' || link.kind === 'demo' ? 'project-action project-action-primary' : 'project-action'}
+        >
+            <Icon aria-hidden="true" />
+            <span>{link.label}</span>
+        </a>
+    );
+}
+
 export default function CardPage({ config, embedded = false }: { config: CardPageConfig; embedded?: boolean }) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.5 }}
+            className="project-collection"
         >
-            <div className={embedded ? "mb-4" : "mb-8"}>
-                <h1 className={`${embedded ? "text-2xl" : "text-4xl"} font-serif font-bold text-primary mb-4`}>{config.title}</h1>
+            <header className={embedded ? 'mb-6' : 'mb-10'}>
+                <p className="project-eyebrow">SELECTED WORK</p>
+                <h1 className={`${embedded ? 'text-3xl' : 'text-5xl'} font-serif font-bold text-primary mb-4`}>{config.title}</h1>
                 {config.description && (
-                    <div className={`${embedded ? "text-base" : "text-lg"} text-neutral-600 dark:text-neutral-500 max-w-2xl leading-relaxed`}>
-                        <ReactMarkdown components={markdownComponents}>
-                            {config.description}
-                        </ReactMarkdown>
+                    <div className={`${embedded ? 'text-base' : 'text-lg'} text-neutral-600 dark:text-neutral-500 max-w-2xl leading-relaxed`}>
+                        <ReactMarkdown components={markdownComponents}>{config.description}</ReactMarkdown>
                     </div>
                 )}
-            </div>
+            </header>
 
-            <div className={`grid ${embedded ? "gap-4" : "gap-6"}`}>
+            <div className="project-grid">
                 {config.items.map((item, index) => (
-                    <motion.div
-                        key={index}
+                    <motion.article
+                        key={item.title}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.1 * index }}
-                        className={`bg-white dark:bg-neutral-900 ${embedded ? "p-4" : "p-6"} rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-lg transition-all duration-200 hover:scale-[1.01]`}
+                        transition={{ duration: 0.4, delay: 0.08 * index }}
+                        className="project-card"
                     >
-                        <div className="flex justify-between items-start mb-2">
-                            <h3 className={`${embedded ? "text-lg" : "text-xl"} font-semibold text-primary`}>{item.title}</h3>
-                            {item.date && (
-                                <span className="text-sm text-neutral-500 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">
-                                    {item.date}
-                                </span>
+                        {item.image && (
+                            <div className="project-card-media">
+                                {/* Public project images are authored content and do not need Next image processing. */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={item.image} alt="" loading="lazy" />
+                            </div>
+                        )}
+                        <div className="project-card-body">
+                            <div className="project-card-topline">
+                                <span>{item.subtitle}</span>
+                                <span>{item.date}</span>
+                            </div>
+                            <h2>{item.title}</h2>
+                            {item.content && (
+                                <div className="project-card-copy">
+                                    <ReactMarkdown components={markdownComponents}>{item.content}</ReactMarkdown>
+                                </div>
                             )}
+                            {item.tags && (
+                                <div className="project-tags">
+                                    {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                                </div>
+                            )}
+                            <div className="project-actions">
+                                {item.links?.map((link) => <ProjectLink key={`${link.label}-${link.href}`} link={link} />)}
+                                {!item.links && item.link && <ProjectLink link={{ label: 'Open project', href: item.link, kind: 'project' }} />}
+                            </div>
                         </div>
-                        {item.subtitle && (
-                            <p className={`${embedded ? "text-sm" : "text-base"} text-accent font-medium mb-3`}>{item.subtitle}</p>
-                        )}
-                        {item.content && (
-                            <div className={`${embedded ? "text-sm" : "text-base"} text-neutral-600 dark:text-neutral-500 leading-relaxed`}>
-                                <ReactMarkdown components={markdownComponents}>
-                                    {item.content}
-                                </ReactMarkdown>
-                            </div>
-                        )}
-                        {item.tags && (
-                            <div className="flex flex-wrap gap-2 mt-4">
-                                {item.tags.map(tag => (
-                                    <span key={tag} className="text-xs text-neutral-500 bg-neutral-50 dark:bg-neutral-800/50 px-2 py-1 rounded border border-neutral-100 dark:border-neutral-800">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-                    </motion.div>
+                    </motion.article>
                 ))}
             </div>
         </motion.div>

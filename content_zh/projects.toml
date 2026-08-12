@@ -1,16 +1,67 @@
 type = "card"
 title = "项目"
-description = "个人项目与实验。"
+description = "研究系统、交互实验与开源工具。每个条目直接连接项目主页、代码仓库、论文或在线演示。"
 
 [[items]]
-title = "ETO 水滴：三体问题水滴模拟器"
+title = "GeoMoE"
+subtitle = "跨视角地理定位"
+date = "2026"
+image = "/papers/geomoe_overview.png"
+content = "面向多空间尺度层次化跨视角地理定位的稀疏混合专家方法。"
+tags = ["地理定位", "混合专家", "遥感"]
+[[items.links]]
+label = "项目主页"
+href = "https://fanrj3.github.io/GeoMoE/"
+kind = "project"
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/GeoMoE"
+kind = "github"
+[[items.links]]
+label = "论文"
+href = "https://arxiv.org/abs/2608.01060"
+kind = "paper"
+
+[[items]]
+title = "SatSAM2"
+subtitle = "卫星视频目标跟踪"
+date = "2026"
+image = "/papers/satsam2_flag.png"
+content = "将可提示 SAM2、约束运动建模和状态感知恢复结合，用于小目标与遮挡场景的零样本卫星视频跟踪。"
+tags = ["SAM2", "目标跟踪", "卫星视频"]
+[[items.links]]
+label = "项目主页"
+href = "https://fanrj3.github.io/SatSAM2/"
+kind = "project"
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/SatSAM2"
+kind = "github"
+[[items.links]]
+label = "论文"
+href = "https://arxiv.org/abs/2511.18264"
+kind = "paper"
+
+[[items]]
+title = "ETO 水滴"
 subtitle = "3D 交互式模拟器"
 date = "2025"
-content = """一个基于 WebGL 技术的 3D 交互式模拟器，再现了刘慈欣《三体》中标志性的"水滴"武器。玩家操控先进的外星探测器，执行摧毁人类宇宙飞船舰队的任务。
+image = "/eto_architecture.png"
+content = "基于 WebGL 的《三体》水滴模拟器，包含高速飞行、舰队行为、电影化镜头以及网页与桌面构建。"
+tags = ["Three.js", "WebGL", "Electron"]
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/eto"
+kind = "github"
 
-**特性：** 高速物理模拟、体积粒子爆炸效果、智能 AI 舰队机制、电影级相机系统、沉浸式音频系统、多种输入支持（键盘、鼠标、手柄）、跨平台（Web + 桌面）。
-
-**技术栈：** Three.js (r181)、Vite 7.2、Electron 39.2
-
-[GitHub 仓库](https://github.com/fanrj3/eto)"""
-tags = ["Three.js", "WebGL", "游戏", "交互"]
+[[items]]
+title = "建筑物简化与纹理处理"
+subtitle = "遥感几何处理流程"
+date = "2025"
+image = "/papers/raster_building_pipeline.png"
+content = "基于遥感影像形状与纹理线索的栅格建筑物简化方法及其实现。"
+tags = ["建筑物简化", "计算机视觉", "遥感"]
+[[items.links]]
+label = "GitHub"
+href = "https://github.com/fanrj3/BuildingSimplificationAndTexturing"
+kind = "github"

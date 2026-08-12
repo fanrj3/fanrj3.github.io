@@ -1,0 +1,43 @@
+{
+  "New Byte World note": {
+    "scope": "mdx,markdown",
+    "prefix": "byte-note",
+    "description": "Create a Byte World implementation note",
+    "body": [
+      "---",
+      "title: ${1:Note title}",
+      "description: ${2:What is implemented and what the reader will understand.}",
+      "date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
+      "status: draft",
+      "series: ${3:Series name}",
+      "tags:",
+      "  - ${4:Topic}",
+      "featured: false",
+      "---",
+      "",
+      "## Why build it",
+      "",
+      "${5:State the question this implementation answers.}",
+      "",
+      "## Model or algorithm",
+      "",
+      "\\$\\$",
+      "${6:y = f(x)}",
+      "\\$\\$",
+      "",
+      "## Minimal implementation",
+      "",
+      "```${7:python} title=\"${8:example.py}\"",
+      "${9:# implementation}",
+      "```",
+      "",
+      "## Verification",
+      "",
+      "${10:List the tests or expected results.}",
+      "",
+      "## What I would change",
+      "",
+      "${0:Record limitations and the next iteration.}"
+    ]
+  }
+}

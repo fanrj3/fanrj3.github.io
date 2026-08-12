@@ -53,7 +53,8 @@ function loadDynamicPageData(slug: string, locale?: string): DynamicPageLocaleDa
 export function generateStaticParams() {
   const config = getConfig();
   return config.navigation
-    .filter((nav) => nav.type === 'page' && nav.target !== 'about')
+    .filter((nav) => nav.type === 'page' && nav.target !== 'about' && nav.target !== 'byte-world')
+    .filter((nav) => getPageConfig(nav.target) !== null)
     .map((nav) => ({
       slug: nav.target,
     }));

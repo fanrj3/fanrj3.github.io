@@ -26,6 +26,12 @@ target = "projects"
 href = "/projects"
 
 [[navigation]]
+title = "Byte World"
+type = "page"
+target = "byte-world"
+href = "/byte-world"
+
+[[navigation]]
 title = "获奖"
 type = "page"
 target = "awards"
