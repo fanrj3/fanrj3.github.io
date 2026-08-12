@@ -66,9 +66,9 @@ export default function SelectedPublications({ publications, title, enableOnePag
                                     : pub.journal || pub.conference}
                             </p>
                         )}
-                        {(pub.description || (pub.status === 'under-review' && pub.abstract)) && (
+                        {(pub.status === 'under-review' ? pub.summary : pub.description) && (
                             <p className="text-sm text-neutral-500 dark:text-neutral-500 line-clamp-2">
-                                {pub.description || pub.abstract}
+                                {pub.status === 'under-review' ? pub.summary : pub.description}
                             </p>
                         )}
                         {(pub.url || pub.projectUrl || pub.code || pub.datasetUrl) && (

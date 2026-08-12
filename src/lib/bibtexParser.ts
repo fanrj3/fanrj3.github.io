@@ -98,7 +98,8 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
       code: tags.code,
       projectUrl: tags.project,
       datasetUrl: tags.dataset,
-      abstract: cleanBibTeXString(tags.abstract),
+      abstract: status === 'under-review' ? undefined : cleanBibTeXString(tags.abstract),
+      summary: cleanBibTeXString(locale?.toLowerCase().startsWith('zh') ? tags.summaryzh || tags.summary : tags.summary),
       description: cleanBibTeXString(tags.description || tags.note),
       selected,
       preview,
@@ -106,7 +107,7 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
       // Store original BibTeX (excluding custom fields)
       bibtex: tags.showbibtex === 'false'
         ? undefined
-        : reconstructBibTeX(entry, ['selected', 'preview', 'description', 'keywords', 'code', 'project', 'dataset', 'status', 'showbibtex']),
+        : reconstructBibTeX(entry, ['selected', 'preview', 'summary', 'summaryzh', 'description', 'keywords', 'code', 'project', 'dataset', 'status', 'showbibtex']),
     };
 
     // Clean up undefined fields

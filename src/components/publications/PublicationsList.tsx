@@ -203,17 +203,12 @@ export default function PublicationsList({ config, publications, embedded = fals
                             <div className="flex flex-col md:flex-row gap-6">
                                 {pub.preview && (
                                     <div className="w-full md:w-48 flex-shrink-0">
-                                        <div className={cn(
-                                            "aspect-video md:aspect-[4/3] relative rounded-lg overflow-hidden",
-                                            pub.preview === 'epbevplus_pipeline.png'
-                                                ? "bg-white"
-                                                : "bg-neutral-100 dark:bg-neutral-800"
-                                        )}>
+                                        <div className="aspect-video md:aspect-[4/3] relative rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800">
                                             <Image
                                                 src={`/papers/${pub.preview}`}
                                                 alt={pub.title}
                                                 fill
-                                                className={pub.preview === 'epbevplus_pipeline.png' ? "object-contain p-1" : "object-cover"}
+                                                className="object-cover"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                         </div>
@@ -242,9 +237,9 @@ export default function PublicationsList({ config, publications, embedded = fals
                                             : `${pub.journal || pub.conference} ${pub.year}`}
                                     </p>
 
-                                    {pub.status === 'under-review' && pub.abstract && (
-                                        <p className="text-sm text-neutral-600 dark:text-neutral-500 mb-4 line-clamp-4">
-                                            {pub.abstract}
+                                    {pub.status === 'under-review' && pub.summary && (
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-500 mb-4 leading-relaxed">
+                                            {pub.summary}
                                         </p>
                                     )}
 
